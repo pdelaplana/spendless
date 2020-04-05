@@ -1,0 +1,45 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list lines="full" class="">
+    
+    <ion-item detail button (click)="goToEditDisplayNamePage()">
+      <ion-label>
+        <h5>Display Name</h5>
+        <p>{{ displayName }}</p>
+      </ion-label>
+    </ion-item>
+    
+    <ion-item detail button >
+      <ion-label>
+        <h5>Email</h5>
+        <p>{{ email }}</p>
+      </ion-label>
+    </ion-item>
+    
+  </ion-list>
+
+  <ion-list lines="full" class="">
+    
+    
+    <ion-item detail button (click)="goToEditSpendingLimitPage()">
+      <ion-label>
+        <h4>Spending Limit</h4>
+        <p>{{ spendingLimit | currency}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+ 
+
+</ion-content>

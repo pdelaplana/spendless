@@ -24,6 +24,9 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^5.0.0",
     "core-js": "^2.5.4",
+    "moment": "^2.24.0",
+    "ngx-gauge": "^1.0.0-beta.12",
+    "ngx-logger": "^4.1.2",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
@@ -51,5 +54,5 @@
     "tslint": "~5.15.0",
     "typescript": "~3.4.3"
   },
-  "description": "An Ionic project"
+  "description": "A Mindful Spending App"
 }

@@ -1,0 +1,72 @@
+<ion-card>
+  <ion-card-content>
+    <ion-row >
+      <ion-col class="ion-text-left">
+        <p>{{spendingPeriod |  date:'MMM yyyy' }}</p>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <p>Add Budget</p>
+      </ion-col>
+    </ion-row>
+    <div class="ion-padding-vertical ion-text-center">
+      <ngx-gauge  [type]="gaugeType" 
+                  size="250" 
+                  [value]="totalAvailableToSpendAmount-totalSpendAmount" 
+                  [label]="gaugeLabel" 
+                  [prepend]="gaugePrependText" 
+                  thick="12" 
+                  cap="round" 
+                  foregroundColor="rgb(0, 71, 204)"
+                  [max]="totalAvailableToSpendAmount"
+                  animate=true
+      >
+      <ngx-gauge-value>
+        <span style="font-size:2.5rem;">
+          {{ totalAvailableToSpendAmount-totalSpendAmount  | currency }}
+        </span>
+        
+      </ngx-gauge-value>
+      <!-- 
+      
+      <ngx-gauge-prepend>
+        <img src="assets/images/card.svg" alt="">
+      </ngx-gauge-prepend> 
+      -->
+      </ngx-gauge>
+  
+      <div class="inside-guage ion-text-center">
+        <img src="assets/images/card.svg" alt="">
+        <p>Your money remaining</p>
+      </div>
+    </div>
+  
+    <ion-grid>
+
+      <ion-row>
+        <ion-col class="ion-text-right" size="5">
+          <ion-text color="secondary">Needs</ion-text><br/>
+          <strong>{{totalNeedsAmount| currency}}</strong>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+        <ion-col size="5" class="ion-text-left">
+          <ion-text color="secondary">Wants</ion-text><br/>
+          <strong>{{totalWantsAmount| currency}}</strong>
+        </ion-col>
+      </ion-row>
+    
+      <ion-row>
+        <ion-col class="ion-text-right" size="5">
+          <ion-text color="secondary">Culture</ion-text><br/>
+          <strong>{{totalCultureAmount| currency}}</strong>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+        <ion-col size="5" class="ion-text-left">
+          <ion-text color="secondary">Unexpected</ion-text><br/>
+          <strong>{{totalUnexpectedAmount| currency}}</strong>
+        </ion-col>
+      </ion-row>
+    
+    </ion-grid>
+  </ion-card-content>
+</ion-card>
+

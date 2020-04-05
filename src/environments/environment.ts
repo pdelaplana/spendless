@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  application: {
+    name: 'Spendless',
+  },
+  firebaseApiKey: 'AIzaSyCdzgrmpF2E6mZS0LrZF_SObyjeBNx80cI',
+  apiUrl:  'https://us-central1-spendless-api.cloudfunctions.net/api/v1/',
+  authUrl: 'https://identitytoolkit.googleapis.com/v1/',
+  baseUrl: 'https://localhost:44371/',
 };
 
 /*
