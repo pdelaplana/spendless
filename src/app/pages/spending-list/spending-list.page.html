@@ -1,0 +1,94 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Spending</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="picker.open()">
+        <ion-icon name="calendar-sharp"></ion-icon>
+        <ion-datetime #picker 
+         
+          displayFormat="MMMM YYYY" 
+          pickerFormat="MMMM YYYY" 
+          class="ion-no-padding ion-hide"
+          (ionChange)="dateChanged(picker.value)"
+          >
+        </ion-datetime>
+      </ion-button>
+      <ion-button (click)="addSpendTransaction()">
+        <ion-icon name="add-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="the-upper-back">
+    
+  </div>
+
+  <app-spending-gauge #spendingGauge
+        [spendingPeriod]="spendingPeriod"
+        [totalAvailableToSpendAmount]="totalAvailableToSpendAmount"
+        [totalSpendAmount]="totalSpendAmount"
+        [totalNeedsAmount]="totalNeedsAmount"
+        [totalWantsAmount]="totalWantsAmount"
+        [totalCultureAmount]="totalCultureAmount"
+        [totalUnexpectedAmount]="totalUnexpectedAmount"
+    ></app-spending-gauge>
+
+  
+  <div class="bottom-section ion-padding">
+    <!--
+       <ion-row class="btns-holder">
+      <ion-col>
+        <ion-button expand="block">
+          <img src="assets/images/send.svg" alt="">
+          &nbsp;Send Money
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block">
+          <img src="assets/images/calculation.svg" alt="">
+          &nbsp;Calculation
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    -->
+   
+    <div class="details">
+      <div class="" *ngFor="let group of transactionsGroupedByDate " >
+        <ion-list-header>
+          <span>{{ group.date }}</span>
+        </ion-list-header>
+        <ion-list inset="false" lines="full" style="padding-top:0;padding-bottom:0">
+
+          <ion-item-sliding *ngFor="let transaction of group.spending">
+            <ion-item detail="false" button (click)="editSpendTransaction(transaction)">
+              <ion-avatar slot="start">
+                <img src="{{ transaction.category | iconPath }}" alt="">
+              </ion-avatar>
+                
+              <ion-label >
+                {{ transaction.description }}
+              </ion-label>
+              <ion-label slot="end" class="ion-text-right" color="">
+                {{ transaction.amount | currency }}
+              </ion-label>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="light" (click)="deleteSpendTransaction(transaction.id)">
+                <ion-icon name="close-sharp"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        
+        </ion-list>
+        
+        
+      </div>
+    </div>
+  </div>
+
+</ion-content>

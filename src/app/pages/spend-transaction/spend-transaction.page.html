@@ -1,0 +1,60 @@
+<ion-header transparent>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <form [formGroup]="spendTransactionForm">
+    <ion-list lines="full" >
+
+      <ion-item>
+        <ion-label position="stacked">How much did you spend? <ion-text color="danger">*</ion-text></ion-label>
+        <app-currency-input precision="2" [amountIn]="spendAmount.value" (amountEntered)="amountChanged($event)" ></app-currency-input>   
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">When did you spend it? <ion-text color="danger">*</ion-text></ion-label>
+        <ion-datetime displayFormat="" min="1989-06-04"  formControlName="spendDate"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">What did you spend it on? <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="text" formControlName="description" ></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="stacked">Where did you spend it on?</ion-label>
+        <ion-input type="text" formControlName="location"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Category</ion-label>
+        <ion-select multiple="false" placeholder="" formControlName="category">
+          <ion-select-option value="N" selected>Need</ion-select-option>
+          <ion-select-option value="W">Want</ion-select-option>
+          <ion-select-option value="C">Culture</ion-select-option>
+          <ion-select-option value="U">Unexpected</ion-select-option>
+          
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Notes</ion-label>
+        <ion-textarea formControlName="notes"></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+  </form>
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="save()">
+      Save
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

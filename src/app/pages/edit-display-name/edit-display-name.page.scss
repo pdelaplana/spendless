@@ -1,0 +1,28 @@
+ion-toolbar {
+  --border-width: 0;
+  --background: #0047CC !important;
+  --color: white !important;
+
+  ion-title{
+      font-weight: 400 !important;
+  }
+}
+
+ion-toolbar.transparent  {
+  --border-width: 0;
+  --border-color: transparent;
+  --background: transparent !important;
+}
+
+
+ion-content{
+  --background: #F8F9F9!important;
+
+  ion-list {
+    margin-top:20px;
+
+    ion-item:first-of-type {
+      border-top: solid 1px rgb(200, 199, 204, 1) !important;
+    }
+  }
+}

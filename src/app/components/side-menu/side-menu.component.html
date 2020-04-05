@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <div>
+      <div class="img-holder">
+        <ion-avatar>
+          <img src="assets/images/no-user-image-square.jpg" alt="">
+        </ion-avatar>
+      </div>
+      <div class="details ion-text-center">
+        <h5>{{ name }}<span> <img src="assets/images/verified.svg" alt=""></span> </h5>
+        <p>{{ email }}</p>
+      </div>
+    </div>
+  </ion-toolbar>
+  
+</ion-header>
+<ion-content>
+
+  <ion-list >
+    <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+      <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+        <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+        <ion-label>{{ p.title }}</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+
+    <ion-menu-toggle auto-hide="false" *ngIf="isAuthenticated()">
+      <ion-item lines="none" detail="false" (click)="logout()">
+        <ion-icon slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
+        <ion-label>Log Out</ion-label>
+      </ion-item>
+    </ion-menu-toggle>
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-nav">
+      <ul>
+          <li >Like this app? Leave a review!</li>
+      </ul>
+    </div>
+
+    <div class="footer-social">
+        <ion-icon  name="logo-instagram"></ion-icon>
+        <ion-icon  name="logo-facebook"></ion-icon>
+        <ion-icon  name="logo-twitter"></ion-icon>
+        <ion-icon  name="globe"></ion-icon>
+    </div>
+
+    <div class="footer-app-version">
+        Version v{{version}}
+    </div>
+
+  </ion-toolbar>
+</ion-footer>

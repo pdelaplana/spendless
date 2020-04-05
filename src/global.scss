@@ -24,3 +24,103 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+.modal-wrapper{
+  background: transparent !important;
+}
+
+.searchbar-input-container{
+      padding-left: 10px !important;
+}
+
+.item-radio-checked
+{
+--background: #dfe7f5 !important;
+--color:var(--ion-color-primary) !important;
+}
+
+.cat-holder
+{
+ overflow-x: scroll !important;
+ overflow-y: hidden !important;
+ white-space: nowrap !important;
+ &::-webkit-scrollbar {
+   display: none !important;
+}
+ ion-radio-group{
+   .rad-item
+   {
+       margin: 0 10px !important;
+       width: 70px;
+      display: inline-block !important;
+      ion-item{
+          --min-height:70px;
+          --border-radius:50% !important;
+          //--background:rgb(153, 153, 153);
+          ion-radio{
+              opacity: 0 !important;
+          }
+      }
+   }
+     
+  }
+}
+
+ion-tab-bar {
+  --ion-tab-bar-color-activated: #267DCE;
+ion-tab-button{
+  text-align: center !important;
+  margin-top: -20px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 25px !important;
+  ion-label{
+      padding-top: 40px !important;
+  }
+  &:nth-child(1) {
+      background: url(./assets/images/tabicn/home.svg);
+  }
+  &:nth-child(2) {
+      background: url(./assets/images/tabicn/Expenses.svg);
+  }
+  &:nth-child(3) {
+      background: url(./assets/images/tabicn/Wallet.svg);
+  }
+  &:nth-child(4) {
+      background: url(./assets/images/tabicn/Wallet.svg);
+  }
+  &:nth-child(5) {
+      background: url(./assets/images/tabicn/profile.svg);
+  }
+
+  &[aria-selected=true] {
+      &:nth-child(1) {
+          background: url(./assets/images/tabicn/Homea.svg);
+      }
+      &:nth-child(2) {
+          background: url(./assets/images/tabicn/Expensesa.svg);
+      }
+      &:nth-child(3) {
+          background: url(./assets/images/tabicn/Walleta.svg);
+      }
+      &:nth-child(4) {
+          background: url(./assets/images/tabicn/Walleta.svg);
+      }
+      &:nth-child(5) {
+          background: url(./assets/images/tabicn/profilea.svg);
+      }
+  }
+}
+}
+
+
+.toast-class{
+    --background:#FF4127;
+    --border-color:#852114;
+    --border-radius:1px;
+    --border-style:solid;
+    --border-width:4px;
+    --button-color:#FFDD00;
+    --color:#fff;
+}

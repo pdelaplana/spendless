@@ -1,0 +1,16 @@
+:host div {
+  align-items: flex-start;
+}
+:host div div {
+  display:inline-flex;
+}
+:host div span {
+  display:inline;
+
+}
+:host div ion-input {
+  display:inline;
+  vertical-align:top;
+}
+
+
