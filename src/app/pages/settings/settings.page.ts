@@ -1,9 +1,10 @@
+import { CommonUIService } from './../../services/common-ui.service';
 import { UpdatedSpendingLimitMessage } from './../../messages/updated-spending-limit.message';
 import { EditSpendingLimitMessage } from '../../messages/edit-spending-limit.message';
 import { UpdatedDisplayNameMessage } from './../../messages/updated-display-name.message';
 import { EditDisplayNameMessage } from './../../messages/edit-display-name.message';
 import { ComponentMessagingService } from './../../services/component-messaging.service';
-import { GetAccountService } from './../../services/get-account.service';
+import { GetAccountService } from '../../services/account/get-account.service';
 import { NavController, } from '@ionic/angular';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -23,6 +24,7 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   constructor(
     private navController: NavController,
+    private commonUIService: CommonUIService,
     private messagingService: ComponentMessagingService,
     private getAccountService: GetAccountService) {
     // check for messahes
@@ -37,11 +39,13 @@ export class SettingsPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.commonUIService.presentLoadingPage();
     this.getAccountService.invoke().subscribe(
       account => {
         this.displayName = account.name;
         this.email = account.email;
         this.spendingLimit = account.spendingLimit;
+        this.commonUIService.dismissLoadingPage();
       }
     );
   }

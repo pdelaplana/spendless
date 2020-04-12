@@ -1,9 +1,9 @@
-import { UpdateSpendingService } from './../../services/update-spending.service';
+import { UpdateSpendingService } from '../../services/spending/update-spending.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, ToastController, NavParams } from '@ionic/angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { CreateSpendingService } from '../../services/create-spending.service';
+import { CreateSpendingService } from '../../services/spending/create-spending.service';
 import { NotificationService } from './../../services/notification.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 

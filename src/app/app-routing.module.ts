@@ -45,6 +45,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/edit-spending-limit/edit-spending-limit.module').then( m => m.EditSpendingLimitPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'logout',
+    loadChildren: () => import('./pages/logout/logout.module').then( m => m.LogoutPageModule)
+  },
 ];
 
 @NgModule({

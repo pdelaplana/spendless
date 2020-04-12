@@ -28,7 +28,7 @@ export class SideMenuComponent implements OnInit {
     },
   ];
 
-  version: 'Alpha';
+  version = 'Alpha';
   name: string;
   email: string;
 

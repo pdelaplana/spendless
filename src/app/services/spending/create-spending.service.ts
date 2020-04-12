@@ -1,20 +1,22 @@
-import { AuthenticationService } from './authentication.service';
-import { map } from 'rxjs/operators';
-import { ApiResponse } from './../shared/api-response';
-import { Spending } from '@app/models/spending';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from './../../environments/environment';
+import { AuthenticationService } from '../authentication.service';
+
+
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { environment } from '../../../environments/environment';
+import { ApiResponse } from '@app/shared/api-response';
+import { Spending } from '@app/models/spending';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UpdateSpendingService {
+export class CreateSpendingService {
 
   private endpoint = environment.apiUrl + 'spending';
 
-  id: string;
   date: Date;
   amount: number;
   description: string;
@@ -26,14 +28,13 @@ export class UpdateSpendingService {
     return true;
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
   invoke(): Observable<Spending> {
 
     if (this.validate()) {
 
       const request = {
-        id: this.id,
         date: this.date,
         amount: this.amount,
         description: this.description,
@@ -41,7 +42,7 @@ export class UpdateSpendingService {
         category : this.category,
         notes: this.notes
       };
-      return this.http.put<ApiResponse>( `${this.endpoint}` , request )
+      return this.http.post<ApiResponse>( `${this.endpoint}`, request )
         .pipe(
           map(result => result.data as Spending ),
         );
@@ -49,4 +50,6 @@ export class UpdateSpendingService {
 
 
   }
+
+
 }

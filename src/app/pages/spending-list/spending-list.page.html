@@ -40,22 +40,6 @@
 
   
   <div class="bottom-section ion-padding">
-    <!--
-       <ion-row class="btns-holder">
-      <ion-col>
-        <ion-button expand="block">
-          <img src="assets/images/send.svg" alt="">
-          &nbsp;Send Money
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button expand="block">
-          <img src="assets/images/calculation.svg" alt="">
-          &nbsp;Calculation
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    -->
    
     <div class="details">
       <div class="" *ngFor="let group of transactionsGroupedByDate " >
@@ -86,9 +70,15 @@
         
         </ion-list>
         
-        
       </div>
     </div>
   </div>
 
+  <ion-infinite-scroll threshold="10%" position (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="circles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  
 </ion-content>

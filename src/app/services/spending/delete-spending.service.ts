@@ -1,8 +1,8 @@
-import { HandleAuthErrorService } from './handle-auth-error.service';
-import { AuthenticationService } from './authentication.service';
+import { HandleAuthErrorService } from '../handle-auth-error.service';
+import { AuthenticationService } from '../authentication.service';
 import { map, catchError } from 'rxjs/operators';
-import { environment } from './../../environments/environment';
-import { ApiResponse } from './../shared/api-response';
+import { environment } from '../../../environments/environment';
+import { ApiResponse } from '@app/shared/api-response';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';

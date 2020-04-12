@@ -5,10 +5,10 @@
         <p>{{spendingPeriod |  date:'MMM yyyy' }}</p>
       </ion-col>
       <ion-col class="ion-text-right">
-        <p>Add Budget</p>
+        <p>{{daysLeft}}</p>
       </ion-col>
     </ion-row>
-    <div class="ion-padding-vertical ion-text-center">
+    <div class="ion-padding-vertical ion-text-center" style="height:230px">
       <ngx-gauge  [type]="gaugeType" 
                   size="250" 
                   [value]="totalAvailableToSpendAmount-totalSpendAmount" 
@@ -44,24 +44,24 @@
 
       <ion-row>
         <ion-col class="ion-text-right" size="5">
-          <ion-text color="secondary">Needs</ion-text><br/>
+          <ion-text>Needs</ion-text><br/>
           <strong>{{totalNeedsAmount| currency}}</strong>
         </ion-col>
         <ion-col size="2"></ion-col>
         <ion-col size="5" class="ion-text-left">
-          <ion-text color="secondary">Wants</ion-text><br/>
+          <ion-text>Wants</ion-text><br/>
           <strong>{{totalWantsAmount| currency}}</strong>
         </ion-col>
       </ion-row>
     
       <ion-row>
         <ion-col class="ion-text-right" size="5">
-          <ion-text color="secondary">Culture</ion-text><br/>
+          <ion-text>Culture</ion-text><br/>
           <strong>{{totalCultureAmount| currency}}</strong>
         </ion-col>
         <ion-col size="2"></ion-col>
         <ion-col size="5" class="ion-text-left">
-          <ion-text color="secondary">Unexpected</ion-text><br/>
+          <ion-text>Unexpected</ion-text><br/>
           <strong>{{totalUnexpectedAmount| currency}}</strong>
         </ion-col>
       </ion-row>

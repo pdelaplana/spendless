@@ -1,9 +1,10 @@
+import { CommonUIService } from './../../services/common-ui.service';
 import { AuthenticationService } from './../../services/authentication.service';
 import { NotificationService } from './../../services/notification.service';
 import { LoginService } from './../../services/login.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 import { ThrowStmt } from '@angular/compiler';
 
 @Component({
@@ -34,8 +35,8 @@ export class LoginPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private navController: NavController,
+    private commonUIService: CommonUIService,
     private authenticationService: AuthenticationService,
-    private notificationService: NotificationService,
     private loginService: LoginService) {
 
     this.loginForm = this.formBuilder.group({
@@ -58,7 +59,10 @@ export class LoginPage implements OnInit {
   get password() { return this.loginForm.get('password'); }
 
   ngOnInit() {
+    // clear local storage
     this.authenticationService.logout();
+    // clear any loading overlays
+    this.commonUIService.dismissLoadingPage();
   }
 
   goSignup() {
@@ -81,7 +85,7 @@ export class LoginPage implements OnInit {
         this.username.setErrors({ loginFailed: true });
         this.password.setErrors({ loginFailed: true });
         this.loginForm.reset();
-        this.notificationService.notify('Login failed.  Please try again.');
+        this.commonUIService.notifyError('Login failed.  Please try again.');
       }
     );
 

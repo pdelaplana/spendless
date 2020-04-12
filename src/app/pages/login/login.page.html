@@ -66,22 +66,22 @@
                 <ion-checkbox mode="ios" slot="start"></ion-checkbox>
               </ion-item>
             </ion-col>
-            <ion-col class="col-forgot" text-right>
+            <ion-col class="col-forgot ion-text-right">
               <p>Forgot Password?</p>
             </ion-col>
           </ion-row>
         </div>
 
       </div>
-      <div class="loginbtn-holder" text-center>
+      <div class="loginbtn-holder ion-text-center">
         <ion-button size="block" type="submit" routerDirection="root" [disabled]="loginForm.invalid" (click)="login()">
           Login
         </ion-button>
       </div>
 
     </form>
-    <div class="signup-holder" text-center padding-horizontal>
-      <p>Don't have an account?&nbsp;<span (click)="goSignup()">Sign Up</span></p>
+    <div class="signup-holder ion-text-center ion-padding-horizontal">
+      <p>Don't have an account?&nbsp;<a (click)="goSignup()">Sign Up</a></p>
     </div>
   </div>
 </ion-content>

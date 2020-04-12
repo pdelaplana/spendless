@@ -1,3 +1,4 @@
+import { CommonUIService } from './services/common-ui.service';
 import { AuthenticationService } from './services/authentication.service';
 import { ComponentMessagingService } from './services/component-messaging.service';
 import { TokenInterceptor } from './interceptors/token.interceptor';
@@ -39,6 +40,7 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [
     StatusBar,
     SplashScreen,
+    CommonUIService,
     ComponentMessagingService,
     AuthenticationService,
     {

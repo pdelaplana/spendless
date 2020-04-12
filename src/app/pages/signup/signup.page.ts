@@ -99,7 +99,7 @@ export class SignupPage implements OnInit {
 
     this.signupService.invoke().subscribe(result => {
       this.notificationService.notify('Sign up completed');
-      // this.navController.navigateRoot('spending-list');
+      this.navController.navigateRoot('settings');
     });
 
   }

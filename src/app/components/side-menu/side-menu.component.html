@@ -1,6 +1,6 @@
 <ion-header>
-  <ion-toolbar>
-    <div>
+  <ion-toolbar *ngIf="isAuthenticated()">
+    <div >
       <div class="img-holder">
         <ion-avatar>
           <img src="assets/images/no-user-image-square.jpg" alt="">
@@ -12,12 +12,11 @@
       </div>
     </div>
   </ion-toolbar>
-  
 </ion-header>
-<ion-content>
+<ion-content >
 
-  <ion-list >
-    <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+  <ion-list *ngIf="isAuthenticated()">
+    <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index" >
       <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
         <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
         <ion-label>{{ p.title }}</ion-label>
@@ -25,7 +24,7 @@
     </ion-menu-toggle>
 
     <ion-menu-toggle auto-hide="false" *ngIf="isAuthenticated()">
-      <ion-item lines="none" detail="false" (click)="logout()">
+      <ion-item lines="none" detail="false" routerDirection="root" routerLink="/logout">
         <ion-icon slot="start" ios="log-out-outline" md="log-out-sharp"></ion-icon>
         <ion-label>Log Out</ion-label>
       </ion-item>
@@ -35,8 +34,8 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <div class="footer-nav">
+  <ion-toolbar *ngIf="isAuthenticated()">
+    <div class="footer-nav" >
       <ul>
           <li >Like this app? Leave a review!</li>
       </ul>

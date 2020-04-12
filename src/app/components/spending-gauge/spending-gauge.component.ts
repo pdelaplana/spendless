@@ -1,5 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 
 
 @Component({
@@ -17,6 +18,8 @@ export class SpendingGaugeComponent implements OnInit {
   gaugeLabel = 'of $3824';
   gaugePrependText = '';
 
+  @ViewChild('picker', {static: true}) picker;
+
   @Input() set totalAvailableToSpendAmount(value: number) {
     this._totalAvailableToSpendAmount = value;
     this.gaugeLabel = `of ${this.currencyPipe.transform(this._totalAvailableToSpendAmount)}`;
@@ -24,8 +27,6 @@ export class SpendingGaugeComponent implements OnInit {
   get totalAvailableToSpendAmount() {
     return this._totalAvailableToSpendAmount;
   }
-
-  @ViewChild('picker', {static: true}) picker;
 
   @Input() spendingPeriod = new Date();
   @Input() totalSpendAmount = 0;
@@ -37,6 +38,16 @@ export class SpendingGaugeComponent implements OnInit {
   constructor(private currencyPipe: CurrencyPipe) { }
 
   ngOnInit() {
+
+  }
+
+  get daysLeft() {
+    const daysDiff = moment(this.spendingPeriod).endOf('month').diff(moment(), 'days');
+    if (daysDiff > 0) {
+      return `${daysDiff} days left`;
+    } else {
+      return '';
+    }
   }
 
   openPicker() {

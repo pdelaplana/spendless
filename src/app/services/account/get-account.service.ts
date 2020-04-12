@@ -1,4 +1,4 @@
-import { ErrorHandlerService } from './error-handler.service';
+import { ErrorHandlerService } from '../error-handler.service';
 import { map, catchError } from 'rxjs/operators';
 import { ApiResponse } from '@app/shared/api-response';
 import { Observable, throwError } from 'rxjs';

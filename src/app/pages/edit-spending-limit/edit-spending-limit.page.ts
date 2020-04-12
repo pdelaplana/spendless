@@ -1,6 +1,6 @@
 import { UpdatedSpendingLimitMessage } from './../../messages/updated-spending-limit.message';
 import { EditSpendingLimitMessage } from '../../messages/edit-spending-limit.message';
-import { UpdateAccountService } from './../../services/update-account.service';
+import { UpdateAccountService } from '../../services/account/update-account.service';
 import { NotificationService } from './../../services/notification.service';
 import { ComponentMessagingService } from './../../services/component-messaging.service';
 import { Subscription } from 'rxjs';

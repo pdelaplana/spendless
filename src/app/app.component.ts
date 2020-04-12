@@ -1,5 +1,5 @@
 import { AuthenticationService } from './services/authentication.service';
-import { GetAccountService } from './services/get-account.service';
+import { GetAccountService } from './services/account/get-account.service';
 import { Component, OnInit } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-    console.log('Application Init');
     this.getAccountService.invoke().subscribe(account => {
       this.authenticationService.account = account;
     });

@@ -4,6 +4,7 @@
   flex-direction: column;
   height: 100%;
 
+  /*
   background: var(--ion-color-secondary);
   background-image: linear-gradient(to right, #3180b6, #2b79af, #2572a7, #1e6ba0, #176499);
 
@@ -12,13 +13,14 @@
   color: var(--ion-color-primary-contrast);
   font-family: 'Varela Round', sans-serif;
   padding-bottom: var(--ion-safe-area-bottom);
+  */
 }
 
 ion-header {
   background: white;
 
   div {
-    margin-top:25px;
+    margin-top:15px;
     .img-holder
     {
       display: inline;

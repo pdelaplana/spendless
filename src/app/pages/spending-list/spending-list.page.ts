@@ -1,14 +1,12 @@
-import { Observable } from 'rxjs';
-import { GetAccountService } from './../../services/get-account.service';
-import { AuthenticationService } from './../../services/authentication.service';
-import { NotificationService } from './../../services/notification.service';
-import { DeleteSpendingService } from './../../services/delete-spending.service';
+import { GetAccountService } from '@app/services/account/get-account.service';
+import { CommonUIService } from '@app/services/common-ui.service';
+import { AuthenticationService } from '@app/services/authentication.service';
+import { DeleteSpendingService } from '@app/services/spending/delete-spending.service';
 import { Spending } from '@app/models/spending';
-import { GetSpendingService } from './../../services/get-spending.service';
-import { SpendTransactionPage } from '../../pages/spend-transaction/spend-transaction.page';
+import { GetSpendingService } from '@app/services/spending/get-spending.service';
+import { SpendTransactionPage } from '@app/pages/spend-transaction/spend-transaction.page';
 import { Component, OnInit, IterableDiffer, IterableDiffers, DoCheck, IterableChangeRecord, ViewChild } from '@angular/core';
-import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
-import { KeyValue } from '@angular/common';
+import { NavController, ModalController, AlertController,  IonInfiniteScroll } from '@ionic/angular';
 import * as moment from 'moment';
 
 
@@ -18,6 +16,8 @@ import * as moment from 'moment';
   styleUrls: ['./spending-list.page.scss']
 })
 export class SpendingListPage implements OnInit, DoCheck {
+
+  private initialDataLoaded: false;
 
   totalAvailableToSpendAmount = 0;
   totalSpendAmount = 0;
@@ -32,6 +32,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   transactionsGroupedByDate: { date: string, spending: Spending[]}[];
 
   @ViewChild('picker', {static: true}) picker;
+  @ViewChild(IonInfiniteScroll, {static: true}) infiniteScroll: IonInfiniteScroll;
 
   private iterableDiffer: IterableDiffer<Spending> | null;
 
@@ -71,43 +72,47 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   private async fillTransactions() {
-    const loader = await this.loadingController.create({
-      message: 'Please wait...'
+    return new Promise((resolve, reject) => {
+      this.getSpendingService.month = moment(this.spendingPeriod).format('MMM');
+      this.getSpendingService.year = moment(this.spendingPeriod).format('YYYY');
+      this.getSpendingService.lastDocId = this.transactions.length > 0 ? this.transactions[this.transactions.length - 1].id : null;
+      // this.getSpendingService.offset = this.transactions.length || 0;
+      // this.getSpendingService.size = 3;
+      this.getSpendingService.invoke().subscribe(
+        spendingAll => {
+          spendingAll.forEach((spending) => this.transactions.push(spending) );
+          resolve(spendingAll);
+        },
+        () => {
+          console.log('error');
+         }
+      );
     });
-    loader.present();
-    this.getSpendingService.month = moment(this.spendingPeriod).format('MMM');
-    this.getSpendingService.year = moment(this.spendingPeriod).format('YYYY');
-    this.getSpendingService.invoke().subscribe(
-      spendingAll => {
-        this.transactions = spendingAll;
-        loader.dismiss();
-      });
   }
 
   constructor(
     private navCtrl: NavController,
     private alertController: AlertController,
     private modalController: ModalController,
-    private loadingController: LoadingController,
     private iterable: IterableDiffers,
+    private commonUIService: CommonUIService,
     private authenticationService: AuthenticationService,
+    private getAccountService: GetAccountService,
     private getSpendingService: GetSpendingService,
-    private deleteSpendingService: DeleteSpendingService,
-    private notificationService: NotificationService) {
-    }
+    private deleteSpendingService: DeleteSpendingService) {
+}
 
   ngOnInit() {
 
     this.iterableDiffer = this.iterable.find(this.transactions).create();
 
-    this.authenticationService.accountChanges.subscribe(account => {
+    this.commonUIService.presentLoadingPage();
+    this.getAccountService.invoke().subscribe(account => {
       this.totalAvailableToSpendAmount = account.spendingLimit;
-      this.fillTransactions();
+      this.fillTransactions().then(result => {
+         this.commonUIService.dismissLoadingPage();
+      });
     });
-
-    // this.getAccountService.invoke().subscribe(account => {
-      // this.totalAvailableToSpendAmount = account.spendingLimit;
-    // });
 
   }
 
@@ -127,13 +132,18 @@ export class SpendingListPage implements OnInit, DoCheck {
       changes.forEachRemovedItem((record: IterableChangeRecord<Spending>) => {
         // this.renderer.removeClass(this.host.nativeElement, record.item);
       });
+
     }
   }
 
 
   dateChanged(date) {
     this.spendingPeriod = moment(date).endOf('month').toDate();
-    this.fillTransactions();
+    this.transactions = [];
+    this.commonUIService.presentLoadingPage();
+    this.fillTransactions().then(result => {
+      this.commonUIService.dismissLoadingPage();
+    });
   }
 
   async addSpendTransaction() {
@@ -142,7 +152,13 @@ export class SpendingListPage implements OnInit, DoCheck {
     });
     modal.onDidDismiss().then((result) => {
       if (result !== null) {
-        this.transactions.push(result.data.spending);
+        const startDate = moment(this.transactionsGroupedByDate[this.transactionsGroupedByDate.length - 1].date).toDate();
+        // const startDate = moment(this.spendingPeriod).startOf('month').toDate();
+        const endDate = moment(this.spendingPeriod).endOf('month').toDate();
+        if (moment(result.data.spending.date).toDate() >= startDate && moment(result.data.spending.date).toDate() <= endDate) {
+          this.transactions.push(result.data.spending);
+        }
+
       }
     });
     return await modal.present();
@@ -163,14 +179,23 @@ export class SpendingListPage implements OnInit, DoCheck {
     });
     modal.onDidDismiss().then((result) => {
       if (result !== null) {
+        // const startDate = moment(this.spendingPeriod).startOf('month').toDate() ;
+        const startDate = moment(this.transactionsGroupedByDate[this.transactionsGroupedByDate.length - 1].date).toDate();
+        const endDate = moment(this.spendingPeriod).endOf('month').toDate();
         const transaction = this.transactions.find(t => t.id === result.data.spending.id);
-        transaction.amount = result.data.spending.amount;
-        transaction.date = result.data.spending.date;
-        transaction.description = result.data.spending.description;
-        transaction.location = result.data.spending.location;
-        transaction.category = result.data.spending.category;
-        transaction.notes = result.data.spending.notes;
-        console.log(result.data.spending);
+
+        if (moment(result.data.spending.date).toDate() < startDate || moment(result.data.spending.date).toDate() > endDate){
+          // remove transactions
+          this.transactions = this.transactions.filter(t => t.id !== transaction.id);
+        } else {
+          transaction.amount = result.data.spending.amount;
+          transaction.date = result.data.spending.date;
+          transaction.description = result.data.spending.description;
+          transaction.location = result.data.spending.location;
+          transaction.category = result.data.spending.category;
+          transaction.notes = result.data.spending.notes;
+          console.log(result.data.spending);
+        }
       }
     });
     return await modal.present();
@@ -197,7 +222,7 @@ export class SpendingListPage implements OnInit, DoCheck {
               result => {
                 const index = this.transactions.findIndex(t => t.id === id);
                 this.transactions.splice(index, 1);
-                this.notificationService.notify('Your spending has been deleted.');
+                this.commonUIService.notify('Your spending has been deleted.');
               });
           }
         }
@@ -205,6 +230,24 @@ export class SpendingListPage implements OnInit, DoCheck {
     });
     await alert.present();
   }
+
+  loadData(event) {
+    console.log('scrolling...');
+    this.fillTransactions().then(result => {
+        event.target.complete();
+        console.log('data loaeded');
+        console.log('event.target.disabled', event.target.disabled);
+    });
+
+    setTimeout(() => {
+    }, 500);
+  }
+
+  /*
+  toggleInfiniteScroll() {
+    this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
+  }
+  */
 
   viewNotifications() {
     this.navCtrl.navigateForward('notifications');

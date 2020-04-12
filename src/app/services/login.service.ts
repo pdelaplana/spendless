@@ -1,4 +1,4 @@
-import { GetAccountService } from './get-account.service';
+import { GetAccountService } from './account/get-account.service';
 import { map, catchError } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { AuthUserInfo } from './../shared/auth-user-info';
