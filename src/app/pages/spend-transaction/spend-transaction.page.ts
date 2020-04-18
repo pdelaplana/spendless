@@ -32,6 +32,7 @@ export class SpendTransactionPage implements OnInit {
         this.modalController.dismiss({
           dismissed: true,
           spending: {
+            id: spending.id,
             date: spending.date,
             amount: spending.amount,
             description: spending.description,
