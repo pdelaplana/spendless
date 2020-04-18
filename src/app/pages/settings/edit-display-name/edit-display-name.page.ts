@@ -1,9 +1,9 @@
-import { UpdatedDisplayNameMessage } from './../../messages/updated-display-name.message';
+import { UpdatedDisplayNameMessage } from '../../../messages/updated-display-name.message';
 import { FormControl } from '@angular/forms';
-import { NotificationService } from './../../services/notification.service';
-import { UpdateAccountService } from '../../services/account/update-account.service';
-import { EditDisplayNameMessage } from './../../messages/edit-display-name.message';
-import { ComponentMessagingService } from './../../services/component-messaging.service';
+import { NotificationService } from '../../../services/notification.service';
+import { UpdateAccountService } from '../../../services/account/update-account.service';
+import { EditDisplayNameMessage } from '../../../messages/edit-display-name.message';
+import { ComponentMessagingService } from '../../../services/component-messaging.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 

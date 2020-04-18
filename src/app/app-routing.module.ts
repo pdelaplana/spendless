@@ -37,12 +37,12 @@ const routes: Routes = [
   },
   {
     path: 'settings/edit-display-name',
-    loadChildren: () => import('./pages/edit-display-name/edit-display-name.module').then( m => m.EditDisplayNamePageModule),
+    loadChildren: () => import('./pages/settings/edit-display-name/edit-display-name.module').then( m => m.EditDisplayNamePageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'settings/edit-spending-limit',
-    loadChildren: () => import('./pages/edit-spending-limit/edit-spending-limit.module').then( m => m.EditSpendingLimitPageModule),
+    loadChildren: () => import('./pages/settings/edit-spending-limit/edit-spending-limit.module').then( m => m.EditSpendingLimitPageModule),
     canActivate: [AuthGuard]
   },
   {

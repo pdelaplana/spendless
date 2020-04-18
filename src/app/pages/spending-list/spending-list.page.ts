@@ -123,6 +123,7 @@ export class SpendingListPage implements OnInit, DoCheck {
     const changes = this.iterableDiffer.diff(this.transactions);
 
     if (changes) {
+      console.log('changes', changes);
 
       this.transactionsGroupedByDate = this.groupBy(this.transactions);
       this.revaluateTotals(this.transactions);
@@ -196,7 +197,11 @@ export class SpendingListPage implements OnInit, DoCheck {
           transaction.location = result.data.spending.location;
           transaction.category = result.data.spending.category;
           transaction.notes = result.data.spending.notes;
-          console.log(result.data.spending);
+
+          // force refresh of the list since iterablediff does not detect changes in objects 
+          // we could however use a keyValueDiff for use cases like this
+          this.transactionsGroupedByDate = this.groupBy(this.transactions);
+          this.revaluateTotals(this.transactions);
         }
       }
     });

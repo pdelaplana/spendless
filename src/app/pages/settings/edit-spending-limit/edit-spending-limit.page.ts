@@ -1,8 +1,8 @@
-import { UpdatedSpendingLimitMessage } from './../../messages/updated-spending-limit.message';
-import { EditSpendingLimitMessage } from '../../messages/edit-spending-limit.message';
-import { UpdateAccountService } from '../../services/account/update-account.service';
-import { NotificationService } from './../../services/notification.service';
-import { ComponentMessagingService } from './../../services/component-messaging.service';
+import { UpdatedSpendingLimitMessage } from '../../../messages/updated-spending-limit.message';
+import { EditSpendingLimitMessage } from '../../../messages/edit-spending-limit.message';
+import { UpdateAccountService } from '../../../services/account/update-account.service';
+import { NotificationService } from '../../../services/notification.service';
+import { ComponentMessagingService } from '../../../services/component-messaging.service';
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
