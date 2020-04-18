@@ -1,0 +1,20 @@
+ion-button{
+  --border-color: rgba(119, 134, 158, 0.39) !important;
+  --border-radius: 10px !important;
+  --border-style: solid;
+  --border-width: 1px;
+  width: 100% !important;
+  height: 45px !important;
+}
+
+
+.vertical-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75%;
+}
+
+.vertical-bottom {
+  position: absolute; bottom: 0px; width: 100%
+}

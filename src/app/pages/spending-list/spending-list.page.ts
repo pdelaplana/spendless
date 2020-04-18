@@ -114,6 +114,8 @@ export class SpendingListPage implements OnInit, DoCheck {
       });
     });
 
+    // TODO: Temporarily disable paging logic
+
   }
 
   ngDoCheck() {
@@ -232,6 +234,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   loadData(event) {
+    /*
     console.log('scrolling...');
     this.fillTransactions().then(result => {
         event.target.complete();
@@ -241,13 +244,8 @@ export class SpendingListPage implements OnInit, DoCheck {
 
     setTimeout(() => {
     }, 500);
+    */
   }
-
-  /*
-  toggleInfiniteScroll() {
-    this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
-  }
-  */
 
   viewNotifications() {
     this.navCtrl.navigateForward('notifications');

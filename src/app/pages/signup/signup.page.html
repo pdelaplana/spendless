@@ -1,14 +1,15 @@
 <ion-header no-border>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="login"></ion-back-button>
+      <ion-back-button text=""></ion-back-button>
     </ion-buttons>
+    <ion-title>Signup</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <div class="the-content">
-    <div class="the-title">
-      <h2>Signup</h2>
+    <div class="the-title ion-text-center">
+      <img src="assets/images/spendless-logo.png"  />
     </div>
     <form [formGroup]="loginForm" >
       <div class="details">
@@ -59,21 +60,23 @@
           </ng-container>
         </div>
 
-        <div class="second-item">
+        <div class="second-item ion-hide">
           <ion-item lines="none" id="rem" class="ion-no-padding">
-            <ion-label text-wrap>By creating an account, you agree to our
-              Term and Conditions</ion-label>
+            <ion-note class="ion-text-wrap">By creating an account, you agree to our Term and Conditions</ion-note>
             <ion-checkbox mode="ios" slot="start"></ion-checkbox>
           </ion-item>
         </div>
 
       </div>
-      <div class="loginbtn-holder" text-center>
-        <ion-button size="block" type="submit" routerDirection="root" [disabled]="loginForm.invalid" (click)="signup()">
-          Signup
-        </ion-button>
-      </div>
+     
 
     </form>
+  </div>
+  <div class="vertical-bottom">
+    <div class="ion-text-center ion-padding" >
+      <ion-button size="block" type="submit" routerDirection="root" [disabled]="loginForm.invalid" (click)="signup()">
+        Signup
+      </ion-button>
+    </div>
   </div>
 </ion-content>

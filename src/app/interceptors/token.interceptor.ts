@@ -56,7 +56,7 @@ export class TokenInterceptor implements HttpInterceptor {
             console.log('Login failed');
             // this.presentToast('Login failed');
           } else {
-            this.navController.navigateRoot('login');
+            this.navController.navigateRoot('start');
           }
         }
         return throwError(error);

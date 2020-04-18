@@ -1,9 +1,19 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div class="the-content">
-    <div class="the-title">
-      <h2>Welcome Back</h2>
+    <div class="the-title ion-text-center">
+      <img src="assets/images/spendless-logo.png" />
     </div>
-    <div class="btns-holder">
+    
+    <div class="btns-holder ion-hide">
       <ion-row>
         <ion-col>
           <ion-button fill="none" text-center>
@@ -17,6 +27,7 @@
         </ion-col>
       </ion-row>
     </div>
+
     <form [formGroup]="loginForm">
       <div class="details">
 
@@ -57,8 +68,8 @@
             </div>
           </ng-container>
         </div>
-
-        <div class="second-item">
+        
+        <div class="second-item ion-hide">
           <ion-row>
             <ion-col>
               <ion-item lines="none" id="rem" class="ion-no-padding">
@@ -73,15 +84,21 @@
         </div>
 
       </div>
-      <div class="loginbtn-holder ion-text-center">
-        <ion-button size="block" type="submit" routerDirection="root" [disabled]="loginForm.invalid" (click)="login()">
-          Login
-        </ion-button>
-      </div>
+      
 
     </form>
-    <div class="signup-holder ion-text-center ion-padding-horizontal">
-      <p>Don't have an account?&nbsp;<a (click)="goSignup()">Sign Up</a></p>
+
+  </div>
+
+  <div class="vertical-bottom">
+    <div class="ion-text-center ion-padding">
+      <ion-button size="block" type="submit" routerDirection="root" [disabled]="loginForm.invalid" (click)="login()">
+        Login
+      </ion-button>
+    </div>
+    <div class="ion-text-center ion-padding-bottom ion-margin-bottom">
+      <a >Forgot Password</a>
     </div>
   </div>
+
 </ion-content>

@@ -13,6 +13,11 @@ ion-content {
   --background: #f8f9f9 !important;
 }
 
+ion-icon {
+  color:white;
+  background-color: blue;
+}
+
 ion-list-header span{
   font-size: 10pt;
   font-weight: 200;
@@ -68,6 +73,7 @@ ion-list-header span{
 
     .the-list {
       ion-item {
+        height:100px;
         /*
         .thumb {
           margin: 0 !important

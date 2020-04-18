@@ -18,7 +18,9 @@
           --border-style: solid;
           --border-width: 1px;
           width: 100% !important;
+
           height: 45px !important;
+
       }
   }
 
@@ -89,7 +91,7 @@
       .loginbtn-holder
       {
           ion-button{
-              height: 50px !important;
+              height: 45px !important;
               text-transform: none !important;
               border-radius: 12px !important;
           }
@@ -108,4 +110,8 @@
           }
       }
   }
+}
+
+.vertical-bottom {
+  position: absolute; bottom: 0px; width: 100%
 }

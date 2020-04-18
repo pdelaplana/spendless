@@ -4,7 +4,7 @@ import { NotificationService } from './../../services/notification.service';
 import { LoginService } from './../../services/login.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, MenuController } from '@ionic/angular';
 import { ThrowStmt } from '@angular/compiler';
 
 @Component({
@@ -35,6 +35,7 @@ export class LoginPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private navController: NavController,
+    private menuController: MenuController,
     private commonUIService: CommonUIService,
     private authenticationService: AuthenticationService,
     private loginService: LoginService) {
@@ -63,11 +64,9 @@ export class LoginPage implements OnInit {
     this.authenticationService.logout();
     // clear any loading overlays
     this.commonUIService.dismissLoadingPage();
+    this.menuController.enable(false);
   }
 
-  goSignup() {
-    this.navController.navigateForward('signup');
-  }
 
   login() {
 
@@ -77,6 +76,7 @@ export class LoginPage implements OnInit {
     this.loginService.invoke().subscribe(
       result => {
         if (result !== null) {
+          this.menuController.enable(true);
           this.navController.navigateRoot('spending');
         }
       },

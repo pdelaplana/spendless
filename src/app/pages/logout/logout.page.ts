@@ -1,4 +1,4 @@
-import { NavController } from '@ionic/angular';
+import { NavController, MenuController } from '@ionic/angular';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,10 +11,12 @@ export class LogoutPage implements OnInit {
 
   constructor(
     private navController: NavController,
+    private menuController: MenuController,
     private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.authenticationService.logout();
+    this.menuController.enable(false);
   }
 
   goToLogin() {

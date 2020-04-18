@@ -15,7 +15,7 @@
     
     <ion-item detail button (click)="goToEditDisplayNamePage()">
       <ion-label>
-        <h5>Display Name</h5>
+        <h5>Name</h5>
         <p>{{ displayName }}</p>
       </ion-label>
     </ion-item>
@@ -31,7 +31,6 @@
 
   <ion-list lines="full" class="">
     
-    
     <ion-item detail button (click)="goToEditSpendingLimitPage()">
       <ion-label>
         <h4>Spending Limit</h4>
@@ -40,6 +39,23 @@
     </ion-item>
   </ion-list>
 
- 
+  <ion-list lines="full" class="">
+    
+    <ion-item detail button >
+      <ion-label>
+        <h4>Change Password</h4>
+
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list lines="full" class="">
+    
+    <ion-item button detail="false">
+      <ion-label color="danger" class="ion-text-center">
+        <h4>Delete Account</h4>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

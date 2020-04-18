@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { EditSpendingLimitPageRoutingModule } from './edit-spending-limit-routing.module';
 
 import { EditSpendingLimitPage } from './edit-spending-limit.page';
-import { CurrencyInputComponent } from '@app/components/currency-input/currency-input.component';
+
 
 @NgModule({
   imports: [

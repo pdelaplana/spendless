@@ -48,12 +48,13 @@
         </ion-list-header>
         <ion-list inset="false" lines="full" style="padding-top:0;padding-bottom:0">
 
-          <ion-item-sliding *ngFor="let transaction of group.spending">
+          <ion-item-sliding *ngFor="let transaction of group.spending" >
             <ion-item detail="false" button (click)="editSpendTransaction(transaction)">
+               
               <ion-avatar slot="start">
-                <img src="{{ transaction.category | iconPath }}" alt="">
+                <app-spending-category-avatar [category]="transaction.category"></app-spending-category-avatar>
               </ion-avatar>
-                
+     
               <ion-label >
                 {{ transaction.description }}
               </ion-label>
@@ -74,7 +75,7 @@
     </div>
   </div>
 
-  <ion-infinite-scroll threshold="10%" position (ionInfinite)="loadData($event)">
+  <ion-infinite-scroll threshold="10%" position (ionInfinite)="loadData($event)" disabled="true">
     <ion-infinite-scroll-content
       loadingSpinner="circles"
       loadingText="Loading more data...">

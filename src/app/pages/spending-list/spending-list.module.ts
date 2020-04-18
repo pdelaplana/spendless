@@ -1,3 +1,5 @@
+import { TextAvatarComponent } from '../../components/text-avatar/text-avatar.component';
+import { SharedComponentsModule } from './../../components/shared-components.module';
 import { SpendingGaugeComponent } from '../../components/spending-gauge/spending-gauge.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,6 +19,7 @@ import { IconPathPipe } from '@app/helpers/icon-path.pipe';
     CommonModule,
     FormsModule,
     IonicModule,
+    SharedComponentsModule,
     NgxGaugeModule,
     SpendingListPageRoutingModule,
     SpendTransactionPageModule

@@ -8,11 +8,11 @@ export class IconPathPipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
     switch (value) {
       case 'N':
-        return 'assets/images/Bill.svg';
+        return 'assets/images/wallet.png';
       case 'U':
-        return 'assets/images/Bill.svg';
+        return 'assets/images/atm-24.png';
       case 'W':
-        return 'assets/images/Bill.svg';
+        return 'assets/images/Shopping.svg';
       case 'C':
         return 'assets/images/Bill.svg';
       default:
