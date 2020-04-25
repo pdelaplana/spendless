@@ -8,16 +8,16 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SpendingCategoryAvatarComponent implements OnInit {
   @Input() category: string;
 
-  get iconName(){
+  get iconName() {
     switch (this.category) {
       case 'N':
         return 'wallet-sharp';
       case 'U':
         return 'thunderstorm-sharp';
       case 'W':
-        return 'gift-sharp';
+        return 'cart-sharp';
       case 'C':
-        return 'library-sharp';
+        return 'gift-sharp';
       default:
         return 'wallet-sharp';
     }
