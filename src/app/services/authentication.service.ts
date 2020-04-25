@@ -3,6 +3,8 @@ import { AuthUserInfo } from './../shared/auth-user-info';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import * as moment from 'moment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,9 +24,14 @@ export class AuthenticationService {
   }
   constructor() { }
 
-  get isAuthenticated() {
+  get isAuthenticated(): boolean {
     const authUserInfo = JSON.parse(localStorage.getItem('authUserInfo'));
     return (authUserInfo !== null);
+  }
+
+  get hasTokenExpired(): boolean {
+    const authUserInfo = JSON.parse(localStorage.getItem('authUserInfo')) as AuthUserInfo;
+    return (authUserInfo === null) || moment().isAfter(authUserInfo.expiresOn);
   }
 
 

@@ -85,13 +85,13 @@ export class SpendingListPage implements OnInit, DoCheck {
         },
         () => {
           console.log('error');
-         }
+        }
       );
     });
   }
 
   constructor(
-    private navCtrl: NavController,
+    private navController: NavController,
     private alertController: AlertController,
     private modalController: ModalController,
     private iterable: IterableDiffers,
@@ -123,7 +123,6 @@ export class SpendingListPage implements OnInit, DoCheck {
     const changes = this.iterableDiffer.diff(this.transactions);
 
     if (changes) {
-      console.log('changes', changes);
 
       this.transactionsGroupedByDate = this.groupBy(this.transactions);
       this.revaluateTotals(this.transactions);
@@ -253,7 +252,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   viewNotifications() {
-    this.navCtrl.navigateForward('notifications');
+    this.navController.navigateForward('notifications');
   }
 
 }
