@@ -11,34 +11,43 @@ import * as moment from 'moment';
 })
 export class SpendingGaugeComponent implements OnInit {
 
-  // tslint:disable-next-line: variable-name
-  private _totalAvailableToSpendAmount = 1000;
-
   gaugeType = 'arch';
   gaugeLabel = 'of $3824';
   gaugePrependText = '';
+  gaugeMaxValue = 1;
+  gaugeValue = 1;
 
   @ViewChild('picker', {static: true}) picker;
 
   @Input() set totalAvailableToSpendAmount(value: number) {
-    this._totalAvailableToSpendAmount = value;
-    this.gaugeLabel = `of ${this.currencyPipe.transform(this._totalAvailableToSpendAmount)}`;
+    this.gaugeMaxValue = value;
+    this.gaugeLabel = `of ${this.currencyPipe.transform(this.gaugeMaxValue)}`;
   }
   get totalAvailableToSpendAmount() {
-    return this._totalAvailableToSpendAmount;
+    return this.gaugeMaxValue;
+  }
+  @Input() set totalSpendAmount(value: number){
+    this.gaugeValue = value;
+  }
+  get totalSpendAmount() {
+    return this.gaugeValue;
   }
 
+
   @Input() spendingPeriod = new Date();
-  @Input() totalSpendAmount = 0;
   @Input() totalNeedsAmount = 0;
   @Input() totalWantsAmount = 0;
   @Input() totalCultureAmount = 0;
   @Input() totalUnexpectedAmount = 0;
+  @Input() enabled = true;
 
-  constructor(private currencyPipe: CurrencyPipe) { }
+  constructor(private currencyPipe: CurrencyPipe) { 
+    this.gaugeMaxValue = 1;
+    this.gaugeValue = 1;
+  }
 
   ngOnInit() {
-
+  
   }
 
   get daysLeft() {

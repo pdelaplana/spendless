@@ -30,30 +30,19 @@ export class TokenInterceptor implements HttpInterceptor {
         return next.handle(request);
     }
 
-    const accessExpired = !this.authenticationService.isAuthenticated;
-    const refreshExpired = this.authenticationService.hasTokenExpired;
-
-    if (!this.authenticationService.hasTokenExpired) {
-        return next.handle(request);
+    if (this.authenticationService.isAuthenticated && !this.authenticationService.hasTokenExpired) {
+        return next.handle(this.injectToken(request));
     }
     if (this.authenticationService.isAuthenticated && this.authenticationService.hasTokenExpired) {
         if (!this.refreshTokenInProgress) {
             this.refreshTokenInProgress = true;
             this.refreshTokenSubject.next(null);
             return this.refreshAuthTokenService.invoke().pipe(
-                switchMap((result) => {
-                  this.authenticationService.authUserInfo = {
-                    idToken : result.id_token,
-                    refreshToken : result.refresh_token,
-                    localId : result.user_id,
-                    email : '',
-                    expiresIn : result.expires_in,
-                    expiresOn : moment().add(result.expire_in, 's').toDate()
-                  };
-                  this.refreshTokenInProgress = false;
-                  this.refreshTokenSubject.next(result.refresh_token);
-                  return next.handle(this.injectToken(request));
-                }),
+              switchMap((result) => {
+                this.refreshTokenInProgress = false;
+                this.refreshTokenSubject.next(result.refresh_token);
+                return next.handle(this.injectToken(request));
+              }),
             );
         } else {
             return this.refreshTokenSubject.pipe(
@@ -65,12 +54,15 @@ export class TokenInterceptor implements HttpInterceptor {
             );
         }
     }
-    return next.handle(this.injectToken(request));
+
+    if (!this.authenticationService.isAuthenticated) {
+        return next.handle(request);
+    }
   }
 
   private injectToken(request: HttpRequest<any>) {
       const token = this.authenticationService.idToken;
-      request.clone({
+      request = request.clone({
           setHeaders: {
               Authorization: `Bearer ${token}`
           }

@@ -27,6 +27,7 @@ export class RefreshAuthTokenService {
     };
     return this.http.post<any>( this.endpoint, request )
       .pipe(
+
         map(result => {
           this.logger.log('RefreshAuthTokenService => Got New Token', result);
           this.authenticationService.authUserInfo = {
@@ -37,12 +38,15 @@ export class RefreshAuthTokenService {
             expiresIn : result.expires_in,
             expiresOn : moment().add(result.expire_in, 's').toDate()
           };
+          return result;
         }),
+
         catchError((error, caught) => {
           // this.handleAuthError(error);
           this.logger.error('RefreshAuthTokenService => error', error);
           return null;
         })
+
       );
   }
 }

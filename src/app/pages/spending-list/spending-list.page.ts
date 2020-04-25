@@ -19,7 +19,7 @@ export class SpendingListPage implements OnInit, DoCheck {
 
   private initialDataLoaded: false;
 
-  totalAvailableToSpendAmount = 0;
+  totalAvailableToSpendAmount = 1000;
   totalSpendAmount = 0;
   totalNeedsAmount = 0;
   totalWantsAmount = 0;
@@ -55,7 +55,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   private getTotalSpend(transactions: Spending[]) {
-    return transactions.reduce((total, transaction) => total + transaction.amount, 0);
+    return this.totalAvailableToSpendAmount - transactions.reduce((total, transaction) => total + transaction.amount, 0);
   }
 
   private getTotalofCategory(transactions: Spending[], category: string) {
@@ -64,7 +64,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   private revaluateTotals(transactions: Spending[]) {
-    this.totalSpendAmount = this.getTotalSpend(transactions);
+    this.totalSpendAmount =  this.getTotalSpend(transactions);
     this.totalNeedsAmount = this.getTotalofCategory(transactions, 'N');
     this.totalWantsAmount = this.getTotalofCategory(transactions, 'W');
     this.totalCultureAmount = this.getTotalofCategory(transactions, 'C');

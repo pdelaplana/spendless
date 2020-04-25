@@ -11,18 +11,18 @@
     <div class="ion-padding-vertical ion-text-center" style="height:230px">
       <ngx-gauge  [type]="gaugeType" 
                   size="250" 
-                  [value]="totalAvailableToSpendAmount-totalSpendAmount" 
+                  [value]="gaugeValue" 
                   [label]="gaugeLabel" 
                   [prepend]="gaugePrependText" 
                   thick="12" 
                   cap="round" 
                   foregroundColor="rgb(0, 71, 204)"
-                  [max]="totalAvailableToSpendAmount"
-                  animate=true
+                  [max]="gaugeMaxValue"
+                  [animate]="enabled"
       >
       <ngx-gauge-value>
         <span style="font-size:2.5rem;">
-          {{ totalAvailableToSpendAmount-totalSpendAmount  | currency }}
+          {{ totalSpendAmount  | currency }}
         </span>
         
       </ngx-gauge-value>

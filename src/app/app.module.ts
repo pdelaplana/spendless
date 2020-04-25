@@ -1,8 +1,8 @@
+import { TokenInterceptor } from './interceptors/token.interceptor';
 import { RefreshTokenInterceptor } from './interceptors/refresh-token.interceptor';
 import { CommonUIService } from './services/common-ui.service';
 import { AuthenticationService } from './services/authentication.service';
 import { ComponentMessagingService } from './services/component-messaging.service';
-import { TokenInterceptor } from './interceptors/_token.interceptor';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -19,8 +19,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-
-
 
 
 @NgModule({
