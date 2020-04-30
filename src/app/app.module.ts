@@ -1,5 +1,5 @@
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { RefreshTokenInterceptor } from './interceptors/refresh-token.interceptor';
+
 import { CommonUIService } from './services/common-ui.service';
 import { AuthenticationService } from './services/authentication.service';
 import { ComponentMessagingService } from './services/component-messaging.service';

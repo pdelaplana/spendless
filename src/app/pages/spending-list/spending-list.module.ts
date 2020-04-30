@@ -1,4 +1,4 @@
-import { TextAvatarComponent } from '../../components/text-avatar/text-avatar.component';
+
 import { SharedComponentsModule } from './../../components/shared-components.module';
 import { SpendingGaugeComponent } from '../../components/spending-gauge/spending-gauge.component';
 import { NgModule } from '@angular/core';

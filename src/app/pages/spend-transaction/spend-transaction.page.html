@@ -34,10 +34,10 @@
       <ion-item>
         <ion-label position="stacked">Category</ion-label>
         <ion-select multiple="false" placeholder="" formControlName="category">
-          <ion-select-option value="N" selected>Need</ion-select-option>
-          <ion-select-option value="W">Want</ion-select-option>
-          <ion-select-option value="C">Social</ion-select-option>
-          <ion-select-option value="U">Unexpected</ion-select-option>
+          <ion-select-option value="{{ spendCategories.NEEDS.code }}" selected>{{ spendCategories.NEEDS.label }}</ion-select-option>
+          <ion-select-option value="{{ spendCategories.WANTS.code }}">{{ spendCategories.WANTS.label }}</ion-select-option>
+          <ion-select-option value="{{ spendCategories.CULTURE.code }}">{{ spendCategories.CULTURE.label }}</ion-select-option>
+          <ion-select-option value="{{ spendCategories.UNEXPECTED.code }}">{{ spendCategories.UNEXPECTED.label }}</ion-select-option>
           
         </ion-select>
       </ion-item>

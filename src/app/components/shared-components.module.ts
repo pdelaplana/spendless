@@ -1,3 +1,4 @@
+import { CategoryAliasPipe } from '@app/helpers/category-alias.pipe';
 import { SpendingCategoryAvatarComponent } from './spending-category-avatar/spending-category-avatar.component';
 import { IconAvatarComponent } from './icon-avatar/icon-avatar.component';
 import { TextAvatarComponent } from './text-avatar/text-avatar.component';
@@ -10,6 +11,7 @@ import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
+    CategoryAliasPipe,
     CurrencyInputComponent,
     TextAvatarComponent,
     IconAvatarComponent,
@@ -20,6 +22,7 @@ import { CommonModule } from '@angular/common';
     IonicModule,
   ],
   exports: [
+    CategoryAliasPipe,
     CurrencyInputComponent,
     TextAvatarComponent,
     IconAvatarComponent,

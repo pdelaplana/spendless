@@ -55,8 +55,14 @@
               </ion-avatar>
      
               <ion-label >
-                {{ transaction.description }}
+                <p>
+                  {{ transaction.description }}
+                </p>
+                <p style="font-size:small;font-weight:100">
+                  <ion-text color="medium">{{ transaction.category | categoryAlias }}</ion-text>
+                </p>
               </ion-label>
+              
               <ion-label slot="end" class="ion-text-right" color="">
                 {{ transaction.amount | currency }}
               </ion-label>

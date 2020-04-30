@@ -1,3 +1,4 @@
+import { SPEND_CATEGORIES } from './../../shared/constants';
 import { GetAccountService } from '@app/services/account/get-account.service';
 import { CommonUIService } from '@app/services/common-ui.service';
 import { AuthenticationService } from '@app/services/authentication.service';
@@ -18,6 +19,8 @@ import * as moment from 'moment';
 export class SpendingListPage implements OnInit, DoCheck {
 
   private initialDataLoaded: false;
+
+  spendingCategories = SPEND_CATEGORIES;
 
   totalAvailableToSpendAmount = 1000;
   totalSpendAmount = 0;

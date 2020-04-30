@@ -1,3 +1,5 @@
+import { CONSTANTS, SPEND_CATEGORIES } from './../../shared/constants';
+import { CategoryAliasPipe } from '@app/helpers/category-alias.pipe';
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import * as moment from 'moment';
@@ -7,9 +9,16 @@ import * as moment from 'moment';
   selector: 'app-spending-gauge',
   templateUrl: './spending-gauge.component.html',
   styleUrls: ['./spending-gauge.component.scss'],
-  providers: [CurrencyPipe]
+  providers: [CurrencyPipe, CategoryAliasPipe]
 })
 export class SpendingGaugeComponent implements OnInit {
+
+  spendingCategories =  SPEND_CATEGORIES;
+  needsCategoryLabel = 'N';
+  wantsCategoryLabel = 'W';
+  cultureCategoryLabel = 'C';
+  unexpectedCategoryLabel = 'U';
+
 
   gaugeType = 'arch';
   gaugeLabel = 'of $3824';
