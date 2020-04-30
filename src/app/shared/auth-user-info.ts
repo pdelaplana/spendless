@@ -3,5 +3,6 @@ export interface AuthUserInfo {
   refreshToken: string;
   email: string;
   expiresIn: string;
+  expiresOn: Date;
   localId: string;
 }

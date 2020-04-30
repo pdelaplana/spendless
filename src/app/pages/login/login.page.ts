@@ -61,9 +61,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     // clear local storage
-    this.authenticationService.logout();
+    // this.authenticationService.logout();
     // clear any loading overlays
     this.commonUIService.dismissLoadingPage();
+    // disable side menu
     this.menuController.enable(false);
   }
 

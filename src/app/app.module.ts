@@ -1,7 +1,8 @@
+import { TokenInterceptor } from './interceptors/token.interceptor';
+
 import { CommonUIService } from './services/common-ui.service';
 import { AuthenticationService } from './services/authentication.service';
 import { ComponentMessagingService } from './services/component-messaging.service';
-import { TokenInterceptor } from './interceptors/token.interceptor';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -20,8 +21,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +33,7 @@ import { environment } from '../environments/environment';
       serverLoggingUrl: '/api/logs',
       level: NgxLoggerLevel.TRACE,
       serverLogLevel: NgxLoggerLevel.ERROR,
-      disableConsoleLogging: true
+      disableConsoleLogging: false
     }),
     IonicModule.forRoot(),
     AppRoutingModule,
@@ -47,6 +46,13 @@ import { environment } from '../environments/environment';
     CommonUIService,
     ComponentMessagingService,
     AuthenticationService,
+    /*
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RefreshTokenInterceptor,
+      multi: true
+    },
+    */
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

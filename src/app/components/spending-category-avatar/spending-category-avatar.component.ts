@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { SPEND_CATEGORIES } from '@app/shared/constants';
 
 @Component({
   selector: 'app-spending-category-avatar',
@@ -8,18 +9,18 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SpendingCategoryAvatarComponent implements OnInit {
   @Input() category: string;
 
-  get iconName(){
+  get iconName() {
     switch (this.category) {
-      case 'N':
-        return 'wallet-sharp';
-      case 'U':
-        return 'thunderstorm-sharp';
-      case 'W':
-        return 'gift-sharp';
-      case 'C':
-        return 'library-sharp';
+      case SPEND_CATEGORIES.NEEDS.code:
+        return SPEND_CATEGORIES.NEEDS.icon;
+      case SPEND_CATEGORIES.UNEXPECTED.code:
+        return SPEND_CATEGORIES.UNEXPECTED.icon;
+      case SPEND_CATEGORIES.WANTS.code:
+        return SPEND_CATEGORIES.WANTS.icon;
+      case SPEND_CATEGORIES.CULTURE.code:
+        return SPEND_CATEGORIES.CULTURE.icon;
       default:
-        return 'wallet-sharp';
+        return SPEND_CATEGORIES.NEEDS.icon;
     }
   }
 

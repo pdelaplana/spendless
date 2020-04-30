@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
-import { CompileShallowModuleMetadata } from '@angular/compiler';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,8 @@ export class SignupService {
             refreshToken : result.refreshToken,
             localId : result.localId,
             email : result.email,
-            expiresIn : result.expiresIn
+            expiresIn : result.expiresIn,
+            expiresOn : moment().add(result.expiresIn, 's').toDate()
           };
           this.createAccountService.email = result.email;
           this.createAccountService.invoke().subscribe(response => {

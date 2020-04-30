@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+
     this.getAccountService.invoke().subscribe(account => {
       this.authenticationService.account = account;
     });

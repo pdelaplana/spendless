@@ -1,3 +1,5 @@
+import { CONSTANTS, SPEND_CATEGORIES } from './../../shared/constants';
+import { CategoryAliasPipe } from '@app/helpers/category-alias.pipe';
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import * as moment from 'moment';
@@ -7,38 +9,54 @@ import * as moment from 'moment';
   selector: 'app-spending-gauge',
   templateUrl: './spending-gauge.component.html',
   styleUrls: ['./spending-gauge.component.scss'],
-  providers: [CurrencyPipe]
+  providers: [CurrencyPipe, CategoryAliasPipe]
 })
 export class SpendingGaugeComponent implements OnInit {
 
-  // tslint:disable-next-line: variable-name
-  private _totalAvailableToSpendAmount = 1000;
+  spendingCategories =  SPEND_CATEGORIES;
+  needsCategoryLabel = 'N';
+  wantsCategoryLabel = 'W';
+  cultureCategoryLabel = 'C';
+  unexpectedCategoryLabel = 'U';
+
 
   gaugeType = 'arch';
   gaugeLabel = 'of $3824';
   gaugePrependText = '';
+  gaugeMaxValue = 1;
+  gaugeValue = 1;
 
   @ViewChild('picker', {static: true}) picker;
 
   @Input() set totalAvailableToSpendAmount(value: number) {
-    this._totalAvailableToSpendAmount = value;
-    this.gaugeLabel = `of ${this.currencyPipe.transform(this._totalAvailableToSpendAmount)}`;
+    this.gaugeMaxValue = value;
+    this.gaugeLabel = `of ${this.currencyPipe.transform(this.gaugeMaxValue)}`;
   }
   get totalAvailableToSpendAmount() {
-    return this._totalAvailableToSpendAmount;
+    return this.gaugeMaxValue;
+  }
+  @Input() set totalSpendAmount(value: number){
+    this.gaugeValue = value;
+  }
+  get totalSpendAmount() {
+    return this.gaugeValue;
   }
 
+
   @Input() spendingPeriod = new Date();
-  @Input() totalSpendAmount = 0;
   @Input() totalNeedsAmount = 0;
   @Input() totalWantsAmount = 0;
   @Input() totalCultureAmount = 0;
   @Input() totalUnexpectedAmount = 0;
+  @Input() enabled = true;
 
-  constructor(private currencyPipe: CurrencyPipe) { }
+  constructor(private currencyPipe: CurrencyPipe) { 
+    this.gaugeMaxValue = 1;
+    this.gaugeValue = 1;
+  }
 
   ngOnInit() {
-
+  
   }
 
   get daysLeft() {

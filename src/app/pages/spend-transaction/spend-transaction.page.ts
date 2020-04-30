@@ -1,3 +1,5 @@
+import { CategoryAliasPipe } from '@app/helpers/category-alias.pipe';
+import { SPEND_CATEGORIES } from './../../shared/constants';
 import { UpdateSpendingService } from '../../services/spending/update-spending.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, ToastController, NavParams } from '@ionic/angular';
@@ -11,8 +13,11 @@ import { NotificationService } from './../../services/notification.service';
   selector: 'app-spend-transaction',
   templateUrl: './spend-transaction.page.html',
   styleUrls: ['./spend-transaction.page.scss'],
+  providers: [CategoryAliasPipe]
 })
 export class SpendTransactionPage implements OnInit {
+
+  spendCategories = SPEND_CATEGORIES;
 
   spendTransactionForm: FormGroup;
 

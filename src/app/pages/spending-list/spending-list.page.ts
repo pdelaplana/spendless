@@ -1,3 +1,4 @@
+import { SPEND_CATEGORIES } from './../../shared/constants';
 import { GetAccountService } from '@app/services/account/get-account.service';
 import { CommonUIService } from '@app/services/common-ui.service';
 import { AuthenticationService } from '@app/services/authentication.service';
@@ -19,7 +20,9 @@ export class SpendingListPage implements OnInit, DoCheck {
 
   private initialDataLoaded: false;
 
-  totalAvailableToSpendAmount = 0;
+  spendingCategories = SPEND_CATEGORIES;
+
+  totalAvailableToSpendAmount = 1000;
   totalSpendAmount = 0;
   totalNeedsAmount = 0;
   totalWantsAmount = 0;
@@ -55,7 +58,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   private getTotalSpend(transactions: Spending[]) {
-    return transactions.reduce((total, transaction) => total + transaction.amount, 0);
+    return this.totalAvailableToSpendAmount - transactions.reduce((total, transaction) => total + transaction.amount, 0);
   }
 
   private getTotalofCategory(transactions: Spending[], category: string) {
@@ -64,7 +67,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   private revaluateTotals(transactions: Spending[]) {
-    this.totalSpendAmount = this.getTotalSpend(transactions);
+    this.totalSpendAmount =  this.getTotalSpend(transactions);
     this.totalNeedsAmount = this.getTotalofCategory(transactions, 'N');
     this.totalWantsAmount = this.getTotalofCategory(transactions, 'W');
     this.totalCultureAmount = this.getTotalofCategory(transactions, 'C');
@@ -85,13 +88,13 @@ export class SpendingListPage implements OnInit, DoCheck {
         },
         () => {
           console.log('error');
-         }
+        }
       );
     });
   }
 
   constructor(
-    private navCtrl: NavController,
+    private navController: NavController,
     private alertController: AlertController,
     private modalController: ModalController,
     private iterable: IterableDiffers,
@@ -123,7 +126,6 @@ export class SpendingListPage implements OnInit, DoCheck {
     const changes = this.iterableDiffer.diff(this.transactions);
 
     if (changes) {
-      console.log('changes', changes);
 
       this.transactionsGroupedByDate = this.groupBy(this.transactions);
       this.revaluateTotals(this.transactions);
@@ -253,7 +255,7 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   viewNotifications() {
-    this.navCtrl.navigateForward('notifications');
+    this.navController.navigateForward('notifications');
   }
 
 }

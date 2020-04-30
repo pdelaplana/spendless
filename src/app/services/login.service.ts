@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
-import { ThrowStmt } from '@angular/compiler';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +49,8 @@ export class LoginService {
             refreshToken : result.refreshToken,
             localId : result.localId,
             email : result.email,
-            expiresIn : result.expiresIn
+            expiresIn : result.expiresIn,
+            expiresOn : moment().add(result.expiresIn, 's').toDate()
           };
           this.getAccountService.invoke().subscribe(account => {
             this.authenticationService.account = account;

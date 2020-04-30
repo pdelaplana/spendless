@@ -8,9 +8,10 @@ export const environment = {
     name: 'Spendless',
   },
   firebaseApiKey: 'AIzaSyCdzgrmpF2E6mZS0LrZF_SObyjeBNx80cI',
-  apiUrl:  'https://us-central1-spendless-api.cloudfunctions.net/api/v1/',
-  authUrl: 'https://identitytoolkit.googleapis.com/v1/',
-  baseUrl: 'https://localhost:44371/',
+  apiUrl:         'https://us-central1-spendless-api.cloudfunctions.net/api/v1/',
+  authUrl:        'https://identitytoolkit.googleapis.com/v1/',
+  refreshUrl:     'https://securetoken.googleapis.com/v1/token',
+  baseUrl:        'https://localhost:44371/',
 };
 
 /*
