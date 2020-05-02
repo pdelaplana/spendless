@@ -20,9 +20,12 @@ ion-content{
 
   ion-list {
     margin-top:20px;
+    padding-top:0px;
+    padding-bottom:0px;
 
     ion-item:first-of-type {
-      border-top: solid 1px rgb(200, 199, 204, 1) !important;
+      border-top: 1px solid var(--ion-item-border-color,var(--ion-border-color,var(--ion-color-step-150,rgba(0,0,0,0.13)))) !important;
+      
     }
   }
 }

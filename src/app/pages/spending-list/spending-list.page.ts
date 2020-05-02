@@ -221,7 +221,7 @@ export class SpendingListPage implements OnInit, DoCheck {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+           return true;
           }
         }, {
           text: 'Delete',

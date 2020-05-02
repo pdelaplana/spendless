@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Change Email</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="full">
+
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input [formControl]="email"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar class="transparent">
+    <ion-button expand="block"  (click)="save()" >
+      Save
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

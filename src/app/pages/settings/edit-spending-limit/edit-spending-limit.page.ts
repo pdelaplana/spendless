@@ -1,3 +1,4 @@
+import { CurrencyInputComponent } from './../../../components/currency-input/currency-input.component';
 import { UpdatedSpendingLimitMessage } from '../../../messages/updated-spending-limit.message';
 import { EditSpendingLimitMessage } from '../../../messages/edit-spending-limit.message';
 import { UpdateAccountService } from '../../../services/account/update-account.service';
@@ -11,6 +12,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   selector: 'app-edit-spending-limit',
   templateUrl: './edit-spending-limit.page.html',
   styleUrls: ['./edit-spending-limit.page.scss'],
+  providers:[CurrencyInputComponent]
 })
 export class EditSpendingLimitPage implements OnInit, OnDestroy {
 

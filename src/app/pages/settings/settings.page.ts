@@ -1,3 +1,5 @@
+import { UpdatedEmailMessage } from './../../messages/updated-email.message';
+import { EditEmailMessage } from './../../messages/edit-email.message';
 import { CommonUIService } from './../../services/common-ui.service';
 import { UpdatedSpendingLimitMessage } from './../../messages/updated-spending-limit.message';
 import { EditSpendingLimitMessage } from '../../messages/edit-spending-limit.message';
@@ -35,6 +37,9 @@ export class SettingsPage implements OnInit, OnDestroy {
       if (message instanceof UpdatedSpendingLimitMessage) {
         this.spendingLimit = message.payload.spendingLimit;
       }
+      if (message instanceof UpdatedEmailMessage) {
+        this.email = message.payload.email;
+      }
     });
   }
 
@@ -62,6 +67,11 @@ export class SettingsPage implements OnInit, OnDestroy {
   goToEditSpendingLimitPage() {
     this.messagingService.sendMessage(new EditSpendingLimitMessage({ spendingLimit: this.spendingLimit }));
     this.navController.navigateForward('settings/edit-spending-limit');
+  }
+
+  goToEditEmailPage(){
+    this.messagingService.sendMessage(new EditEmailMessage({ email: this.email  }));
+    this.navController.navigateForward('settings/edit-email');
   }
 
 

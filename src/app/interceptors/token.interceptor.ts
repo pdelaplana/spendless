@@ -1,3 +1,4 @@
+import { environment } from '@environments/environment';
 import { RefreshAuthTokenService } from '@app/services/refresh-auth-token.service';
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
@@ -26,7 +27,8 @@ export class TokenInterceptor implements HttpInterceptor {
 
     this.logger.info('TokenInterceptor => request.url ', request.url);
 
-    if (request.url.indexOf(environment.refreshUrl) !== -1) {
+    if (request.url.indexOf(environment.refreshUrl) !== -1
+        || request.url.indexOf(environment.authUrl) !== -1) {
         return next.handle(request);
     }
 

@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: SettingsPage
+  },
+  {
+    path: 'edit-email',
+    loadChildren: () => import('./edit-email/edit-email.module').then( m => m.EditEmailPageModule)
   }
 ];
 
