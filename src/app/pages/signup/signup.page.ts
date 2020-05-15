@@ -1,5 +1,5 @@
 import { NotificationService } from './../../services/notification.service';
-import { AuthenticationService } from './../../services/authentication.service';
+import { AuthenticationService } from '../../services/auth/authentication.service';
 import { SignupService } from './../../services/signup.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';

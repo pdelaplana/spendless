@@ -1,4 +1,7 @@
-import { UpdatedEmailMessage } from './../../messages/updated-email.message';
+import { Store } from '@ngrx/store';
+import { DataCacheService } from './../../services/data-cache.service';
+import { AuthenticationService } from '@app/services/auth/authentication.service';
+import { UpdatedEmailMessage } from '@app/messages/updated-email.message';
 import { EditEmailMessage } from './../../messages/edit-email.message';
 import { CommonUIService } from './../../services/common-ui.service';
 import { UpdatedSpendingLimitMessage } from './../../messages/updated-spending-limit.message';
@@ -10,6 +13,7 @@ import { GetAccountService } from '../../services/account/get-account.service';
 import { NavController, } from '@ionic/angular';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AppState } from '@app/reducers';
 
 @Component({
   selector: 'app-settings',
@@ -27,8 +31,8 @@ export class SettingsPage implements OnInit, OnDestroy {
   constructor(
     private navController: NavController,
     private commonUIService: CommonUIService,
-    private messagingService: ComponentMessagingService,
-    private getAccountService: GetAccountService) {
+    private store: Store<AppState>,
+    private messagingService: ComponentMessagingService) {
     // check for messahes
     this.subscription = this.messagingService.currentMessage.subscribe(message => {
       if (message instanceof UpdatedDisplayNameMessage) {
@@ -45,14 +49,15 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.commonUIService.presentLoadingPage();
-    this.getAccountService.invoke().subscribe(
-      account => {
-        this.displayName = account.name;
-        this.email = account.email;
-        this.spendingLimit = account.spendingLimit;
-        this.commonUIService.dismissLoadingPage();
-      }
+    this.subscription.add(
+      this.store.select('accountState').subscribe(accountState => {
+        this.displayName = accountState.data.name;
+        this.email = accountState.data.email;
+        this.spendingLimit = accountState.data.spendingLimit;
+      })
     );
+    this.commonUIService.dismissLoadingPage();
+
   }
 
   ngOnDestroy() {
@@ -69,9 +74,13 @@ export class SettingsPage implements OnInit, OnDestroy {
     this.navController.navigateForward('settings/edit-spending-limit');
   }
 
-  goToEditEmailPage(){
+  goToEditEmailPage() {
     this.messagingService.sendMessage(new EditEmailMessage({ email: this.email  }));
     this.navController.navigateForward('settings/edit-email');
+  }
+
+  goToEditPasswordPage() {
+    this.navController.navigateForward('settings/edit-password');
   }
 
 

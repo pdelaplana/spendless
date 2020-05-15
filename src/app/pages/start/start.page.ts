@@ -1,5 +1,5 @@
 import { RefreshAuthTokenService } from './../../services/refresh-auth-token.service';
-import { AuthenticationService } from '@app/services/authentication.service';
+import { AuthenticationService } from '@app/services/auth/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
 

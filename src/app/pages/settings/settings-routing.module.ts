@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'edit-email',
     loadChildren: () => import('./edit-email/edit-email.module').then( m => m.EditEmailPageModule)
+  },
+  {
+    path: 'edit-password',
+    loadChildren: () => import('./edit-password/edit-password.module').then( m => m.EditPasswordPageModule)
   }
 ];
 

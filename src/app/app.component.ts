@@ -1,10 +1,13 @@
-import { AuthenticationService } from './services/authentication.service';
-import { GetAccountService } from './services/account/get-account.service';
+import { AppState } from './reducers/index';
+
 import { Component, OnInit } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { share } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import * as fromAccountActions from './store/account/account.actions';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +19,7 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private authenticationService: AuthenticationService,
-    private getAccountService: GetAccountService
+    private store: Store<AppState>
   ) {
     this.initializeApp();
   }
@@ -27,10 +29,7 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-
-    this.getAccountService.invoke().subscribe(account => {
-      this.authenticationService.account = account;
-    });
+    this.store.dispatch(fromAccountActions.loadAccount());
   }
 
   ngOnInit() {

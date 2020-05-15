@@ -1,11 +1,11 @@
-import { UpdatedDisplayNameMessage } from '../../../messages/updated-display-name.message';
+import { ofType } from '@ngrx/effects';
+import { Store, ActionsSubject } from '@ngrx/store';
 import { FormControl } from '@angular/forms';
 import { NotificationService } from '../../../services/notification.service';
-import { UpdateAccountService } from '../../../services/account/update-account.service';
-import { EditDisplayNameMessage } from '../../../messages/edit-display-name.message';
-import { ComponentMessagingService } from '../../../services/component-messaging.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AppState } from '@app/reducers';
+import * as fromAccountActions from '@app/store/account/account.actions';
 
 @Component({
   selector: 'app-edit-display-name',
@@ -16,20 +16,29 @@ export class EditDisplayNamePage implements OnInit, OnDestroy {
 
   name: FormControl = new FormControl('');
 
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
 
   constructor(
-    private messagingService: ComponentMessagingService,
+    private store: Store<AppState>,
+    private actions: ActionsSubject,
     private notificationservice: NotificationService,
-    private updateAccountService: UpdateAccountService) { }
+    ) { }
 
   ngOnInit() {
-     // subscribe to messages
-     this.subscription = this.messagingService.currentMessage.subscribe(message => {
-        if (message instanceof EditDisplayNameMessage) {
-          this.name.setValue(message.payload.displayName);
-        }
-    });
+    this.subscription
+      .add(
+        this.store.select('accountState').subscribe(accountState => this.name.setValue(accountState.data.name))
+      )
+      .add(
+        this.actions.pipe(ofType(fromAccountActions.updateAccountSuccess)).subscribe(data => {
+          this.notificationservice.notify('Name has been changed.');
+        })
+      )
+      .add(
+        this.actions.pipe(ofType(fromAccountActions.updateAccountFailed)).subscribe(data => {
+          this.notificationservice.notify('Oops! Something went wrong.  Please try it again');
+        })
+      );
   }
 
   ngOnDestroy() {
@@ -37,11 +46,8 @@ export class EditDisplayNamePage implements OnInit, OnDestroy {
   }
 
   save() {
-    this.updateAccountService.name = this.name.value;
-    this.updateAccountService.invoke().subscribe(account => {
-      this.messagingService.sendMessage(new UpdatedDisplayNameMessage({displayName: this.name.value }));
-      this.notificationservice.notify('Name has been changed.');
-    });
+    this.store.dispatch(fromAccountActions.updateAccount({ name: this.name.value, email : null, spendingLimit: null }));
   }
+
 
 }

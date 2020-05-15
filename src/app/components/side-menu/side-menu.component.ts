@@ -1,5 +1,7 @@
+import { AppState } from './../../reducers/index';
+import { Store } from '@ngrx/store';
 import { NavController } from '@ionic/angular';
-import { AuthenticationService } from './../../services/authentication.service';
+import { AuthenticationService } from '../../services/auth/authentication.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -33,26 +35,27 @@ export class SideMenuComponent implements OnInit {
   email: string;
 
   constructor(
+    private store: Store<AppState>,
     private authenticationService: AuthenticationService,
-    private navController: NavController) { }
+    private navController: NavController) {    }
 
   ngOnInit() {
     const path = window.location.pathname.split('spending-list/')[1];
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
-    this.authenticationService.accountChanges.subscribe(account => {
-      this.name = account.name;
-      this.email = account.email;
+    this.store.select('accountState').subscribe(state => {
+      this.name = state.data.name;
+      this.email = state.data.email;
     });
   }
 
-  isAuthenticated(): boolean{
+  isAuthenticated(): boolean {
     return this.authenticationService.isAuthenticated;
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.authenticationService.clear();
     this.navController.navigateRoot('login');
   }
 

@@ -1,12 +1,14 @@
-import { CurrencyInputComponent } from './../../../components/currency-input/currency-input.component';
-import { UpdatedSpendingLimitMessage } from '../../../messages/updated-spending-limit.message';
-import { EditSpendingLimitMessage } from '../../../messages/edit-spending-limit.message';
-import { UpdateAccountService } from '../../../services/account/update-account.service';
-import { NotificationService } from '../../../services/notification.service';
-import { ComponentMessagingService } from '../../../services/component-messaging.service';
+import { ofType } from '@ngrx/effects';
+import { Store, ActionsSubject } from '@ngrx/store';
+
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { AppState } from '@app/reducers';
+import * as fromAccountActions from '@app/store/account/account.actions';
+import { CurrencyInputComponent } from '@app/components/currency-input/currency-input.component';
+import { NotificationService } from '@app/services/notification.service';
 
 @Component({
   selector: 'app-edit-spending-limit',
@@ -18,21 +20,30 @@ export class EditSpendingLimitPage implements OnInit, OnDestroy {
 
   spendingLimit: FormControl = new FormControl('');
 
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
 
   constructor(
-    private messagingService: ComponentMessagingService,
-    private notificationservice: NotificationService,
-    private updateAccountService: UpdateAccountService
+    private store: Store<AppState>,
+    private actions: ActionsSubject,
+    private notificationservice: NotificationService
   ) { }
 
   ngOnInit() {
     // subscribe to messages
-    this.subscription = this.messagingService.currentMessage.subscribe(message => {
-      if (message instanceof EditSpendingLimitMessage) {
-        this.spendingLimit.setValue(message.payload.spendingLimit);
-      }
-  });
+    this.subscription
+      .add(
+        this.store.select('accountState').subscribe(accountState => this.spendingLimit.setValue(accountState.data.spendingLimit))
+      )
+      .add(
+        this.actions.pipe(ofType(fromAccountActions.updateAccountSuccess)).subscribe(data => {
+          this.notificationservice.notify('Your spending limit has been changed.');
+        })
+      )
+      .add(
+        this.actions.pipe(ofType(fromAccountActions.updateAccountFailed)).subscribe(data => {
+          this.notificationservice.notify('Oops! Something went wrong.  Please try it again');
+        })
+      );
   }
 
   ngOnDestroy()  {
@@ -43,14 +54,9 @@ export class EditSpendingLimitPage implements OnInit, OnDestroy {
     this.spendingLimit.setValue(event);
   }
 
-
   save() {
-    this.updateAccountService.spendingLimit = this.spendingLimit.value;
-    this.updateAccountService.invoke().subscribe(account => {
-      this.messagingService.sendMessage(new UpdatedSpendingLimitMessage({spendingLimit: account.spendingLimit }));
-      this.notificationservice.notify('Your spending limit has been changed.');
-    });
+    this.store.dispatch(fromAccountActions.updateAccount({ name: '', email: '', spendingLimit: this.spendingLimit.value}));
   }
-
+ 
 
 }

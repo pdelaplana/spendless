@@ -1,6 +1,6 @@
 import { CreateAccountService } from './account/create-account.service';
 import { AuthUserInfo } from './../shared/auth-user-info';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from './auth/authentication.service';
 import { map } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';

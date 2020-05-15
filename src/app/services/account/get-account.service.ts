@@ -1,3 +1,4 @@
+import { DataCacheService } from './../data-cache.service';
 import { ErrorHandlerService } from '../error-handler.service';
 import { map, catchError } from 'rxjs/operators';
 import { ApiResponse } from '@app/shared/api-response';
@@ -15,13 +16,18 @@ export class GetAccountService {
 
   constructor(
     private http: HttpClient,
+    private dataCacheService: DataCacheService,
     private errorHandlerService: ErrorHandlerService) { }
 
   invoke(): Observable<Account> {
     return this.http.get<ApiResponse>( `${this.endpoint}` )
         .pipe(
           map(
-            result => result.data as Account
+            result => {
+              const account = result.data as Account;
+              this.dataCacheService.account = account;
+              return account;
+            }
           ),
           catchError((error, caught) => {
             this.errorHandlerService.handleError(error);

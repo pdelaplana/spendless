@@ -1,14 +1,19 @@
+import { ofType } from '@ngrx/effects';
+import { AppState } from '@app/reducers';
+import { Store, ActionsSubject } from '@ngrx/store';
 import { AlertController, NavController } from '@ionic/angular';
-import { AuthenticationService } from '@app/services/authentication.service';
+import { AuthenticationService } from '@app/services/auth/authentication.service';
 import { LoginService } from '@app/services/login.service';
 import { UpdatedEmailMessage } from '@app/messages/updated-email.message';
-import { ChangeEmailService } from './../../../services/change-email.service';
-import { EditEmailMessage } from './../../../messages/edit-email.message';0
+import { ChangeEmailService } from '../../../services/auth/change-email.service';
+import { EditEmailMessage } from './../../../messages/edit-email.message';
 import { NotificationService } from './../../../services/notification.service';
 import { ComponentMessagingService } from './../../../services/component-messaging.service';
 import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import * as fromAccountActions from '@app/store/account/account.actions';
 
 @Component({
   selector: 'app-edit-email',
@@ -20,47 +25,47 @@ export class EditEmailPage implements OnInit, OnDestroy {
   private oldEmail: string;
   email: FormControl = new FormControl('');
 
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
 
-  private reauthenticateAndChangeEmail(password: string) {
-    // reathenticate before saving
-    this.loginService.email = this.oldEmail;
-    this.loginService.password = password;
-    this.loginService.invoke().subscribe(
-      () => {
-        this.changeEmailService.email = this.email.value;
-        this.changeEmailService.invoke().subscribe(result => {
-          this.messagingService.sendMessage(new UpdatedEmailMessage({email: result.email }));
-          this.notificationService.notify('Email has been changed.');
-          this.authenticationService.logout();
-          this.navController.navigateRoot('login');
-        });
-      },
-      () => {
-        this.notificationService.notify('Oops! Something went wrong.  Please try again.');
-      }
-
-    );
+  private reauthenticateAndChangeEmail(currentPassword: string) {
+    this.store.dispatch(fromAccountActions.changeEmail({
+      newEmail: this.email.value,
+      oldEmail: this.oldEmail,
+      password: currentPassword
+    }));
   }
 
   constructor(
+    private store: Store<AppState>,
+    private actions: ActionsSubject,
     private alertController: AlertController,
     private navController: NavController,
-    private messagingService: ComponentMessagingService,
     private notificationService: NotificationService,
     private authenticationService: AuthenticationService,
-    private loginService: LoginService,
-    private changeEmailService: ChangeEmailService
   ) { }
 
   ngOnInit() {
-     // subscribe to messages
-    this.subscription = this.messagingService.currentMessage.subscribe(message => {
-        if (message instanceof EditEmailMessage) {
-          this.oldEmail = message.payload.email;
-          this.email.setValue(message.payload.email);
-        }
-    });
+    // subscribe to store action
+    this.subscription
+    .add(
+      this.store.select('accountState').subscribe(accountState => {
+        this.email.setValue(accountState.data.email);
+        this.oldEmail = accountState.data.email;
+      } )
+    )
+    .add(
+      this.actions.pipe(ofType(fromAccountActions.changeEmailSuccess)).subscribe(data => {
+        this.notificationService.notify('Your email has been changed.');
+        this.authenticationService.clear();
+        this.navController.navigateRoot('login');
+      })
+    )
+    .add(
+      this.actions.pipe(ofType(fromAccountActions.changeEmailFailed)).subscribe(data => {
+        this.notificationService.notify('Oops! Something went wrong.  Please try it again');
+      })
+    );
+
   }
 
   ngOnDestroy() {

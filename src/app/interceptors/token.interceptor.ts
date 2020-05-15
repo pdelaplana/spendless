@@ -1,6 +1,5 @@
 import { environment } from '@environments/environment';
 import { RefreshAuthTokenService } from '@app/services/refresh-auth-token.service';
-import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 
@@ -8,7 +7,7 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { switchMap, take, filter } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 import { NavController } from '@ionic/angular';
-import { AuthenticationService } from '@app/services/authentication.service';
+import { AuthenticationService } from '@app/services/auth/authentication.service';
 import * as moment from 'moment';
 
 @Injectable()

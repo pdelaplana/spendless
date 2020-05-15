@@ -1,7 +1,9 @@
+import { Subscription } from 'rxjs';
+import { Store, ActionsSubject } from '@ngrx/store';
 import { SPEND_CATEGORIES } from './../../shared/constants';
 import { GetAccountService } from '@app/services/account/get-account.service';
 import { CommonUIService } from '@app/services/common-ui.service';
-import { AuthenticationService } from '@app/services/authentication.service';
+import { AuthenticationService } from '@app/services/auth/authentication.service';
 import { DeleteSpendingService } from '@app/services/spending/delete-spending.service';
 import { Spending } from '@app/models/spending';
 import { GetSpendingService } from '@app/services/spending/get-spending.service';
@@ -9,6 +11,7 @@ import { SpendTransactionPage } from '@app/pages/spend-transaction/spend-transac
 import { Component, OnInit, IterableDiffer, IterableDiffers, DoCheck, IterableChangeRecord, ViewChild } from '@angular/core';
 import { NavController, ModalController, AlertController,  IonInfiniteScroll } from '@ionic/angular';
 import * as moment from 'moment';
+import { AppState } from '@app/reducers';
 
 
 @Component({
@@ -19,7 +22,8 @@ import * as moment from 'moment';
 export class SpendingListPage implements OnInit, DoCheck {
 
   private initialDataLoaded: false;
-
+  private subscription: Subscription = new Subscription();
+  
   spendingCategories = SPEND_CATEGORIES;
 
   totalAvailableToSpendAmount = 1000;
@@ -94,6 +98,8 @@ export class SpendingListPage implements OnInit, DoCheck {
   }
 
   constructor(
+    private store: Store<AppState>,
+    private actions: ActionsSubject,
     private navController: NavController,
     private alertController: AlertController,
     private modalController: ModalController,
@@ -110,6 +116,7 @@ export class SpendingListPage implements OnInit, DoCheck {
     this.iterableDiffer = this.iterable.find(this.transactions).create();
 
     this.commonUIService.presentLoadingPage();
+    this.store.select('accountState'.)
     this.getAccountService.invoke().subscribe(account => {
       this.totalAvailableToSpendAmount = account.spendingLimit;
       this.fillTransactions().then(result => {

@@ -1,4 +1,4 @@
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../auth/authentication.service';
 import { map } from 'rxjs/operators';
 import { ApiResponse } from '../../shared/api-response';
 import { Spending } from '@app/models/spending';

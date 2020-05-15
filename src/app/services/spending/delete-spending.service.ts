@@ -1,5 +1,5 @@
 import { HandleAuthErrorService } from '../handle-auth-error.service';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../auth/authentication.service';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '@app/shared/api-response';
