@@ -1,6 +1,6 @@
 import { RefreshAuthTokenService } from './../services/refresh-auth-token.service';
 import { NavController } from '@ionic/angular';
-import { AuthenticationService } from './../services/authentication.service';
+import { AuthenticationService } from '../services/auth/authentication.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';

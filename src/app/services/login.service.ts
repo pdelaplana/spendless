@@ -1,6 +1,7 @@
+import { DataCacheService } from './data-cache.service';
 import { GetAccountService } from './account/get-account.service';
 import { map, catchError } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from './auth/authentication.service';
 import { AuthUserInfo } from './../shared/auth-user-info';
 import { Account } from './../models/account';
 import { Observable, of } from 'rxjs';
@@ -33,6 +34,7 @@ export class LoginService {
   constructor(
     private http: HttpClient,
     private getAccountService: GetAccountService,
+    private dataCacheService: DataCacheService,
     private authenticationService: AuthenticationService) { }
 
   invoke(): Observable<any> {
@@ -52,9 +54,7 @@ export class LoginService {
             expiresIn : result.expiresIn,
             expiresOn : moment().add(result.expiresIn, 's').toDate()
           };
-          this.getAccountService.invoke().subscribe(account => {
-            this.authenticationService.account = account;
-          });
+          return result;
         }),
         catchError((error, caught) => {
           this.handleAuthError(error);

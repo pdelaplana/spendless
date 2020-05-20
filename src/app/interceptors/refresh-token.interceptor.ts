@@ -1,7 +1,7 @@
 import { NGXLogger } from 'ngx-logger';
 import { environment } from '@environments/environment';
 import { RefreshAuthTokenService } from './../services/refresh-auth-token.service';
-import { AuthenticationService } from './../services/authentication.service';
+import { AuthenticationService } from '../services/auth/authentication.service';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,

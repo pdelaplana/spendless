@@ -1,12 +1,21 @@
-import { CategoryAliasPipe } from '@app/helpers/category-alias.pipe';
-import { SPEND_CATEGORIES } from './../../shared/constants';
-import { UpdateSpendingService } from '../../services/spending/update-spending.service';
-import { Component, OnInit, Input } from '@angular/core';
-import { ModalController, ToastController, NavParams } from '@ionic/angular';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit,  OnDestroy } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { FormGroup, FormBuilder,  Validators } from '@angular/forms';
 
-import { CreateSpendingService } from '../../services/spending/create-spending.service';
-import { NotificationService } from './../../services/notification.service';
+import { Subscription } from 'rxjs';
+
+import { Store, ActionsSubject } from '@ngrx/store';
+import { ofType } from '@ngrx/effects';
+
+import { CategoryAliasPipe } from '@app/helpers/category-alias.pipe';
+import { SPEND_CATEGORIES } from '@app/shared/constants';
+
+import { CommonUIService } from '@app/services/common-ui.service';
+
+import { AppState } from '@app/reducers';
+import { Spending } from '@app/models/spending';
+import { SpendingActions } from '@app/store/spending/spending.actions';
+
 
 
 @Component({
@@ -15,7 +24,9 @@ import { NotificationService } from './../../services/notification.service';
   styleUrls: ['./spend-transaction.page.scss'],
   providers: [CategoryAliasPipe]
 })
-export class SpendTransactionPage implements OnInit {
+export class SpendTransactionPage implements OnInit, OnDestroy {
+
+  private subscription: Subscription = new Subscription();
 
   spendCategories = SPEND_CATEGORIES;
 
@@ -23,69 +34,42 @@ export class SpendTransactionPage implements OnInit {
 
   id = '';
   precision = 2;
+  month: string;
+  year: string;
 
   private create() {
-    this.createSpendingService.category = this.category.value;
-    this.createSpendingService.amount = this.spendAmount.value;
-    this.createSpendingService.date = this.spendDate.value;
-    this.createSpendingService.description = this.description.value;
-    this.createSpendingService.location = this.location.value;
-    this.createSpendingService.notes = this.notes.value;
-
-    this.createSpendingService.invoke().subscribe(
-      spending => {
-        this.modalController.dismiss({
-          dismissed: true,
-          spending: {
-            id: spending.id,
-            date: spending.date,
-            amount: spending.amount,
-            description: spending.description,
-            location: spending.location,
-            category: spending.category,
-            notes: spending.notes
-          }
-        });
-        this.notificationService.notify('Your spending has been saved.');
-      });
-
+    const spending = <Spending>{
+      category: this.category.value,
+      amount: this.spendAmount.value,
+      date: this.spendDate.value,
+      description: this.description.value,
+      location: this.location.value,
+      notes: this.notes.value
+    }
+    this.store.dispatch(SpendingActions.addSpending({spending}));
   }
 
   private update() {
-    this.updateSpendingService.id = this.id;
-    this.updateSpendingService.category = this.category.value;
-    this.updateSpendingService.amount = this.spendAmount.value;
-    this.updateSpendingService.date = this.spendDate.value;
-    this.updateSpendingService.description = this.description.value;
-    this.updateSpendingService.location = this.location.value;
-    this.updateSpendingService.notes = this.notes.value;
-
-    this.updateSpendingService.invoke().subscribe(
-      spending => {
-        this.modalController.dismiss({
-          dismissed: true,
-          spending: {
-            id: spending.id,
-            date: spending.date,
-            amount: spending.amount,
-            description: spending.description,
-            location: spending.location,
-            category: spending.category,
-            notes: spending.notes
-          }
-        });
-        this.notificationService.notify('Your spending has been saved.');
-      });
+    const spending = <Spending>{
+      id: this.id,
+      category: this.category.value,
+      amount: this.spendAmount.value,
+      date: this.spendDate.value,
+      description: this.description.value,
+      location: this.location.value,
+      notes: this.notes.value
+    }
+    this.store.dispatch(SpendingActions.updateSpending({spending}));
   }
 
 
   constructor(
+    private store: Store<AppState>,
+    private actions: ActionsSubject,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
-    private navParams: NavParams,
-    private notificationService: NotificationService,
-    private createSpendingService: CreateSpendingService,
-    private updateSpendingService: UpdateSpendingService
+    private commonUIService: CommonUIService,
+    
   ) {
     this.spendTransactionForm = this.formBuilder.group({
       spendDate: [new Date().toISOString(),  Validators.required],
@@ -97,8 +81,48 @@ export class SpendTransactionPage implements OnInit {
     });
 
   }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit() {
+    this.subscription
+      .add(
+        this.actions.pipe(
+          ofType(
+            SpendingActions.addSpendingSuccess, 
+            SpendingActions.addSpendingSuccessOutOfBounds
+          )
+        ).subscribe(action => {
+          this.modalController.dismiss({
+            dismissed: true,
+          });
+          this.commonUIService.notify('Your spending has been saved.');
+        })
+      )
+      .add(
+        this.actions.pipe(
+          ofType(
+            SpendingActions.addSpendingFailed, 
+            SpendingActions.updateSpendingFailed
+          )
+        ).subscribe(action => {
+          this.commonUIService.notify('Oops.  Something went wrong.  Please try again.');
+        })
+      )
+      .add(
+        this.actions.pipe(
+          ofType(
+            SpendingActions.updateSpendingSuccess, 
+            SpendingActions.updateSpendingSuccessOutOfBounds
+          )
+        ).subscribe(action => {
+          this.modalController.dismiss({
+            dismissed: true,
+          });
+          this.commonUIService.notify('Your spending has been saved.');
+        })
+      );
   }
 
 
@@ -133,7 +157,7 @@ export class SpendTransactionPage implements OnInit {
   save() {
 
     if (!this.spendTransactionForm.valid) {
-      this.notificationService.notify('Please complete missing information before saving.');
+      this.commonUIService.notify('Please complete missing information before saving.');
       return;
     }
 

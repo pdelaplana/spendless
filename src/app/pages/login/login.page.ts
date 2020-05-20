@@ -1,19 +1,22 @@
-import { CommonUIService } from './../../services/common-ui.service';
-import { AuthenticationService } from './../../services/authentication.service';
-import { NotificationService } from './../../services/notification.service';
-import { LoginService } from './../../services/login.service';
-import { Component, OnInit } from '@angular/core';
+import { ofType } from '@ngrx/effects';
+import { Subscription } from 'rxjs';
+import { Store, ActionsSubject } from '@ngrx/store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavController, LoadingController, MenuController } from '@ionic/angular';
-import { ThrowStmt } from '@angular/compiler';
+import { AppState } from '@app/reducers';
+import { CommonUIService } from '@app/services/common-ui.service';
+import { AuthActions } from '@app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   loginForm: FormGroup;
+
+  subscription: Subscription = new Subscription();
 
   errorMessages = {
     username: [
@@ -34,11 +37,11 @@ export class LoginPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private store: Store<AppState>,
+    private actions: ActionsSubject,
     private navController: NavController,
     private menuController: MenuController,
-    private commonUIService: CommonUIService,
-    private authenticationService: AuthenticationService,
-    private loginService: LoginService) {
+    private commonUIService: CommonUIService) {
 
     this.loginForm = this.formBuilder.group({
       username: new FormControl('', Validators.compose([
@@ -60,35 +63,39 @@ export class LoginPage implements OnInit {
   get password() { return this.loginForm.get('password'); }
 
   ngOnInit() {
-    // clear local storage
-    // this.authenticationService.logout();
     // clear any loading overlays
     this.commonUIService.dismissLoadingPage();
     // disable side menu
     this.menuController.enable(false);
+    // subscribe to actions
+    this.subscription
+    .add(
+      this.actions.pipe(ofType(AuthActions.loginSuccess)).subscribe(data => {
+        this.menuController.enable(true);
+        this.navController.navigateRoot('spending');
+      })
+    )
+    .add(
+      this.actions.pipe(ofType(AuthActions.loginFailed)).subscribe(data => {
+        this.username.setErrors({ loginFailed: true });
+        this.password.setErrors({ loginFailed: true });
+        this.loginForm.reset();
+        this.commonUIService.notifyError('Login failed.  Please try again.');
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 
   login() {
 
-    this.loginService.email = this.username.value;
-    this.loginService.password = this.password.value;
-
-    this.loginService.invoke().subscribe(
-      result => {
-        if (result !== null) {
-          this.menuController.enable(true);
-          this.navController.navigateRoot('spending');
-        }
-      },
-      error => {
-        console.log(error);
-        this.username.setErrors({ loginFailed: true });
-        this.password.setErrors({ loginFailed: true });
-        this.loginForm.reset();
-        this.commonUIService.notifyError('Login failed.  Please try again.');
-      }
-    );
+    this.store.dispatch(AuthActions.login({
+      email: this.username.value,
+      password: this.password.value
+    }));
 
   }
 

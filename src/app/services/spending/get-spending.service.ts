@@ -1,6 +1,6 @@
 import { ErrorHandlerService } from '../error-handler.service';
 import { HandleAuthErrorService } from '../handle-auth-error.service';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from '../auth/authentication.service';
 import { map, catchError } from 'rxjs/operators';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';

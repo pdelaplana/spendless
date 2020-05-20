@@ -18,7 +18,7 @@
 
       <ion-item>
         <ion-label position="stacked">When did you spend it? <ion-text color="danger">*</ion-text></ion-label>
-        <ion-datetime displayFormat="" min="1989-06-04"  formControlName="spendDate"></ion-datetime>
+        <ion-datetime displayFormat="" min="1989-06-04" [monthValues]="month" [yearValues]="year"  formControlName="spendDate"></ion-datetime>
       </ion-item>
 
       <ion-item>

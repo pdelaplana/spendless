@@ -1,3 +1,4 @@
+import { NGXLogger } from 'ngx-logger';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -16,6 +17,7 @@ export class UpdateAccountService {
 
   name: string;
   spendingLimit: number;
+  email: string;
 
   constructor(
     private http: HttpClient,
@@ -24,15 +26,16 @@ export class UpdateAccountService {
   invoke(): Observable<Account> {
     const request = {
       name: this.name,
-      spendingLimit: this.spendingLimit
+      spendingLimit: this.spendingLimit,
+      email: this.email
     };
     console.log('UpdateAccountService.invoke().request', request);
     return this.http.put<ApiResponse>( `${this.endpoint}` , request )
       .pipe(
-        map(result => result.data as Account ),
-        tap(result => console.log('UpdateAccountService -> Account', result)),
+        map( result => result.data as Account ),
+        // tap(result => console.log('UpdateAccountService -> Account', result)),
         catchError((error, caught) => {
-          this.errorHandlerService.handleError(error);
+          this.errorHandlerService.handleError('UpdateAccountService', error);
           return throwError(error);
         })
       );

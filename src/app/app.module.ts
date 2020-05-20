@@ -1,7 +1,10 @@
+import { SpendingEffects } from './store/spending/spending.effects';
+import { AuthEffects } from './store/auth/auth.effects';
+import { AccountEffects } from './store/account/account.effects';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 
 import { CommonUIService } from './services/common-ui.service';
-import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService } from './services/auth/authentication.service';
 import { ComponentMessagingService } from './services/component-messaging.service';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -13,12 +16,16 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { LoggerModule, NgxLoggerLevel, NGXLogger } from 'ngx-logger';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { StoreModule, META_REDUCERS } from '@ngrx/store';
+import { reducers, metaReducers, loggerFactory } from './reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './app.effects';
 
 
 @NgModule({
@@ -38,7 +45,20 @@ import { environment } from '../environments/environment';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    }),
+    EffectsModule.forRoot([
+      AppEffects,
+      AccountEffects,
+      AuthEffects,
+      SpendingEffects
+    ])
   ],
   providers: [
     StatusBar,
@@ -61,7 +81,13 @@ import { environment } from '../environments/environment';
     {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
-    }
+    },
+    {
+      provide: META_REDUCERS,
+      deps: [NGXLogger],
+      useFactory: loggerFactory,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })
