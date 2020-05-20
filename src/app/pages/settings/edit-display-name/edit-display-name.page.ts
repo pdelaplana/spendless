@@ -5,7 +5,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppState } from '@app/reducers';
-import * as fromAccountActions from '@app/store/account/account.actions';
+import { AccountActions } from '@app/store/account/account.actions';
 
 @Component({
   selector: 'app-edit-display-name',
@@ -30,12 +30,12 @@ export class EditDisplayNamePage implements OnInit, OnDestroy {
         this.store.select('accountState').subscribe(accountState => this.name.setValue(accountState.data.name))
       )
       .add(
-        this.actions.pipe(ofType(fromAccountActions.updateAccountSuccess)).subscribe(data => {
+        this.actions.pipe(ofType(AccountActions.updateAccountSuccess)).subscribe(data => {
           this.notificationservice.notify('Name has been changed.');
         })
       )
       .add(
-        this.actions.pipe(ofType(fromAccountActions.updateAccountFailed)).subscribe(data => {
+        this.actions.pipe(ofType(AccountActions.updateAccountFailed)).subscribe(data => {
           this.notificationservice.notify('Oops! Something went wrong.  Please try it again');
         })
       );
@@ -46,7 +46,7 @@ export class EditDisplayNamePage implements OnInit, OnDestroy {
   }
 
   save() {
-    this.store.dispatch(fromAccountActions.updateAccount({ name: this.name.value, email : null, spendingLimit: null }));
+    this.store.dispatch(AccountActions.updateAccount({ name: this.name.value, email : null, spendingLimit: null }));
   }
 
 

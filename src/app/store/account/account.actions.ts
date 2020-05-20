@@ -1,55 +1,59 @@
-
 import { Account } from '@app/models/account';
 import { createAction, props } from '@ngrx/store';
 
+export const AccountActions = {
 
-export const loadAccount = createAction(
-  '[Account] Load account from server'
-);
+  loadAccount: createAction(
+    '[Account] Load account from server'
+  ),
+  
+  loadAccountSuccess: createAction(
+    '[Account] Load account success',
+    props<{account: Account}>()
+  ),
+  
+  loadAccountFailed: createAction(
+    '[Account] Load account failed',
+    props<{err: any}>()
+  ),
+  
+  updateAccount: createAction(
+    '[Account] Update account',
+    props<{name: string, email: string, spendingLimit: number }>()
+    // (name: string  = '', email: string = '', spendingLimit: number = null) => ({name, email, spendingLimit})
+  ),
+  
+  updateAccountSuccess: createAction(
+    '[Account] Update account success',
+    props<{account: Account}>()
+  ),
+  
+  updateAccountFailed: createAction(
+    '[Account] Update account failed',
+    props<{err: any}>()
+  ),
+  
+  changeEmail: createAction(
+    '[Account] Change email',
+    props<{oldEmail: string, newEmail: string, password: string}>()
+  ),
+  
+  changeEmailSuccess: createAction(
+    '[Account] Change email success',
+    props<{newEmail: string}>()
+  ),
+  
+  changeEmailFailed: createAction(
+    '[Account] Change email failed',
+    props<{err: any}>()
+  ),
+  
+  createAccount: createAction(
+    '[Account] Create account',
+    props<{account: Account}>()
+  ),
+  
+  
 
-export const loadAccountSuccess = createAction(
-  '[Account] Load account success',
-  props<{account: Account}>()
-);
-
-export const loadAccountFailed = createAction(
-  '[Account] Load account failed',
-  props<{err: any}>()
-);
-
-export const updateAccount = createAction(
-  '[Account] Update account',
-  props<{name: string, email: string, spendingLimit: number }>()
-  // (name: string  = '', email: string = '', spendingLimit: number = null) => ({name, email, spendingLimit})
-);
-
-export const updateAccountSuccess = createAction(
-  '[Account] Update account success',
-  props<{account: Account}>()
-);
-
-export const updateAccountFailed = createAction(
-  '[Account] Update account failed',
-  props<{err: any}>()
-);
-
-export const changeEmail = createAction(
-  '[Account] Change email',
-  props<{oldEmail: string, newEmail: string, password: string}>()
-);
-
-export const changeEmailSuccess = createAction(
-  '[Account] Change email success',
-  props<{newEmail: string}>()
-);
-
-export const changeEmailFailed = createAction(
-  '[Account] Change email failed',
-  props<{err: any}>()
-);
-
-export const createAccount = createAction(
-  '[Account] Create account',
-  props<{account: Account}>()
-);
+}
 

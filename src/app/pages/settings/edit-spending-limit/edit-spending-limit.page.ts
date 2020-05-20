@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AppState } from '@app/reducers';
-import * as fromAccountActions from '@app/store/account/account.actions';
+import { AccountActions } from '@app/store/account/account.actions';
 import { CurrencyInputComponent } from '@app/components/currency-input/currency-input.component';
 import { NotificationService } from '@app/services/notification.service';
 
@@ -35,12 +35,12 @@ export class EditSpendingLimitPage implements OnInit, OnDestroy {
         this.store.select('accountState').subscribe(accountState => this.spendingLimit.setValue(accountState.data.spendingLimit))
       )
       .add(
-        this.actions.pipe(ofType(fromAccountActions.updateAccountSuccess)).subscribe(data => {
+        this.actions.pipe(ofType(AccountActions.updateAccountSuccess)).subscribe(data => {
           this.notificationservice.notify('Your spending limit has been changed.');
         })
       )
       .add(
-        this.actions.pipe(ofType(fromAccountActions.updateAccountFailed)).subscribe(data => {
+        this.actions.pipe(ofType(AccountActions.updateAccountFailed)).subscribe(data => {
           this.notificationservice.notify('Oops! Something went wrong.  Please try it again');
         })
       );
@@ -55,7 +55,7 @@ export class EditSpendingLimitPage implements OnInit, OnDestroy {
   }
 
   save() {
-    this.store.dispatch(fromAccountActions.updateAccount({ name: '', email: '', spendingLimit: this.spendingLimit.value}));
+    this.store.dispatch(AccountActions.updateAccount({ name: '', email: '', spendingLimit: this.spendingLimit.value}));
   }
  
 

@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { NavController, LoadingController, MenuController } from '@ionic/angular';
 import { AppState } from '@app/reducers';
 import { CommonUIService } from '@app/services/common-ui.service';
-import * as fromAuthActions from '@app/store/auth/auth.actions';
+import { AuthActions } from '@app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -70,13 +70,13 @@ export class LoginPage implements OnInit, OnDestroy {
     // subscribe to actions
     this.subscription
     .add(
-      this.actions.pipe(ofType(fromAuthActions.loginSuccess)).subscribe(data => {
+      this.actions.pipe(ofType(AuthActions.loginSuccess)).subscribe(data => {
         this.menuController.enable(true);
         this.navController.navigateRoot('spending');
       })
     )
     .add(
-      this.actions.pipe(ofType(fromAuthActions.loginFailed)).subscribe(data => {
+      this.actions.pipe(ofType(AuthActions.loginFailed)).subscribe(data => {
         this.username.setErrors({ loginFailed: true });
         this.password.setErrors({ loginFailed: true });
         this.loginForm.reset();
@@ -92,7 +92,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   login() {
 
-    this.store.dispatch(fromAuthActions.login({
+    this.store.dispatch(AuthActions.login({
       email: this.username.value,
       password: this.password.value
     }));

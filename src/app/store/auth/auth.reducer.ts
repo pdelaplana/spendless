@@ -1,20 +1,9 @@
-import { AuthUserInfo } from './../../shared/auth-user-info';
-import { Account } from '@app/models/account';
+
 import { Action, createReducer, on } from '@ngrx/store';
-import * as fromAuthActions from './auth.actions';
+import { AuthActions } from './auth.actions';
+import { AuthState } from './auth.state';
 
-export interface AuthState {
-  loading: boolean;
 
-  isAuthenticated: boolean;
-  isTokenExpired: boolean;
-
-  expiresIn: string;
-  expiresOn: Date;
-
-  error: any;
-
-}
 
 export const initialState: AuthState = {
   loading: false,
@@ -30,26 +19,22 @@ export const initialState: AuthState = {
 
 const authReducer = createReducer(
   initialState,
-  on(fromAuthActions.loginSuccess, (state, {expiresIn, expiresOn}) => ({
+  on(AuthActions.loginSuccess, (state, {expiresIn, expiresOn}) => ({
     ...state,
     expiresIn,
     expiresOn,
     isAuthenticated: true,
     isTokenExpired: false
   })),
-  on(fromAuthActions.logoutSuccess, (state) => ({
+  on(AuthActions.logoutSuccess, (state) => ({
     ...state,
     expiresIn: null,
     expiresOn: null,
     isAuthenticated: false,
     isTokenExpired: true
   })),
-  on(fromAuthActions.refreshToken, state => ({...state, loading: true })),
-  on(fromAuthActions.refreshTokenSuccess, state => ({...state, isAuthenticated: true, hasTokenExpired: false }))
-  // on(fromAccountActions.loadAccountSuccess, (state, {account}) => ({...state, loading: false, data: account  })),
-  // on(fromAccountActions.loadAccountFailed, (state, {err}) => ({...state, loading: false, error: err  })),
-  // on(fromAccountActions.updateAccountSuccess, (state, {account}) => ({...state, loading: false, data: account  })),
-  // on(fromAccountActions.updateAccountFailed, (state, {err}) => ({...state, loading: false, error: err  })),
+  on(AuthActions.refreshToken, state => ({...state, loading: true })),
+  on(AuthActions.refreshTokenSuccess, state => ({...state, isAuthenticated: true, hasTokenExpired: false }))
 
 );
 

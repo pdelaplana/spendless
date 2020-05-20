@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import * as fromAccountActions from '@app/store/account/account.actions';
+import { AccountActions } from '@app/store/account/account.actions';
 
 @Component({
   selector: 'app-edit-email',
@@ -28,7 +28,7 @@ export class EditEmailPage implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
 
   private reauthenticateAndChangeEmail(currentPassword: string) {
-    this.store.dispatch(fromAccountActions.changeEmail({
+    this.store.dispatch(AccountActions.changeEmail({
       newEmail: this.email.value,
       oldEmail: this.oldEmail,
       password: currentPassword
@@ -54,14 +54,14 @@ export class EditEmailPage implements OnInit, OnDestroy {
       } )
     )
     .add(
-      this.actions.pipe(ofType(fromAccountActions.changeEmailSuccess)).subscribe(data => {
+      this.actions.pipe(ofType(AccountActions.changeEmailSuccess)).subscribe(data => {
         this.notificationService.notify('Your email has been changed.');
         this.authenticationService.clear();
         this.navController.navigateRoot('login');
       })
     )
     .add(
-      this.actions.pipe(ofType(fromAccountActions.changeEmailFailed)).subscribe(data => {
+      this.actions.pipe(ofType(AccountActions.changeEmailFailed)).subscribe(data => {
         this.notificationService.notify('Oops! Something went wrong.  Please try it again');
       })
     );

@@ -14,11 +14,15 @@ import * as fromAccount from '@app/store/account/account.reducer';
 import * as fromAuth from '@app/store/auth/auth.reducer';
 import * as fromSpending from '@app/store/spending/spending.reducer';
 import { Actions } from '@ngrx/effects';
+import { SpendingState } from '@app/store/spending/spending.state';
+import { AuthState } from '@app/store/auth/auth.state';
+import { AccountState } from '@app/store/account/account.state';
+
 
 export interface AppState {
-  authState: fromAuth.AuthState;
-  accountState: fromAccount.AccountState;
-  spendingState: fromSpending.SpendingState;
+  authState: AuthState;
+  accountState: AccountState;
+  spendingState: SpendingState;
 }
 
 export function loggerFactory(logger: NGXLogger): MetaReducer<AppState> {
@@ -48,10 +52,10 @@ export const selectAccountState = (state: AppState) => state.accountState;
 
 export const selectAccountData =  createSelector(
   selectAccountState,
-  (state: fromAccount.AccountState) => state.data
+  (state: AccountState) => state.data
 );
 
 export const selectAccountName = createSelector(
   selectAccountState,
-  (state: fromAccount.AccountState) => state.data.name
+  (state: AccountState) => state.data.name
 );

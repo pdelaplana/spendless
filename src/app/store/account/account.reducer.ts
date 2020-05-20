@@ -1,12 +1,9 @@
 import { Account } from '@app/models/account';
 import { Action, createReducer, on } from '@ngrx/store';
-import * as fromAccountActions from './account.actions';
+import { AccountActions } from './account.actions';
+import { AccountState } from './account.state';
 
-export interface AccountState {
-  loading: boolean;
-  data: Account;
-  error: any;
-}
+
 
 export const initialState: AccountState = {
   loading: false,
@@ -17,15 +14,15 @@ export const initialState: AccountState = {
 
 const accountReducer = createReducer(
   initialState,
-  on(fromAccountActions.loadAccount, state => ({...state, loading: true})),
-  on(fromAccountActions.loadAccountSuccess, (state, {account}) => ({...state, loading: false, data: account  })),
-  on(fromAccountActions.loadAccountFailed, (state, {err}) => ({...state, loading: false, error: err  })),
-  on(fromAccountActions.updateAccountSuccess, (state, {account}) => ({...state, loading: false, data: account  })),
-  on(fromAccountActions.updateAccountFailed, (state, {err}) => ({...state, loading: false, error: err  })),
-  on(fromAccountActions.changeEmailSuccess, (state, {newEmail}) => ({
+  on(AccountActions.loadAccount, state => ({...state, loading: true})),
+  on(AccountActions.loadAccountSuccess, (state, {account}) => ({...state, loading: false, data: account  })),
+  on(AccountActions.loadAccountFailed, (state, {err}) => ({...state, loading: false, error: err  })),
+  on(AccountActions.updateAccountSuccess, (state, {account}) => ({...state, loading: false, data: account  })),
+  on(AccountActions.updateAccountFailed, (state, {err}) => ({...state, loading: false, error: err  })),
+  on(AccountActions.changeEmailSuccess, (state, {newEmail}) => ({
     ...state, loading: false, data: { ...state.data, email: newEmail }
   })),
-  on(fromAccountActions.changeEmailFailed, (state, {err}) => ({
+  on(AccountActions.changeEmailFailed, (state, {err}) => ({
     ...state, loading: false, error: err
   })),
 );

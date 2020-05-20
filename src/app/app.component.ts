@@ -7,7 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { share } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import * as fromAccountActions from './store/account/account.actions';
+import { AccountActions } from './store/account/account.actions';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-    this.store.dispatch(fromAccountActions.loadAccount());
+    this.store.dispatch(AccountActions.loadAccount());
   }
 
   ngOnInit() {

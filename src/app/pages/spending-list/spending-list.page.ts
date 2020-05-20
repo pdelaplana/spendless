@@ -1,17 +1,22 @@
+
+import { Component, OnInit, IterableDiffer, IterableDiffers, DoCheck, IterableChangeRecord, ViewChild, OnDestroy } from '@angular/core';
+import { NavController, ModalController, AlertController,  IonInfiniteScroll } from '@ionic/angular';
+
 import { Subscription } from 'rxjs';
+
+import * as moment from 'moment';
+
 import { Store, ActionsSubject } from '@ngrx/store';
-import { SPEND_CATEGORIES } from './../../shared/constants';
-import { GetAccountService } from '@app/services/account/get-account.service';
+import { ofType } from '@ngrx/effects';
+
+import { SPEND_CATEGORIES } from '@app/shared/constants';
 import { CommonUIService } from '@app/services/common-ui.service';
-import { AuthenticationService } from '@app/services/auth/authentication.service';
-import { DeleteSpendingService } from '@app/services/spending/delete-spending.service';
 import { Spending } from '@app/models/spending';
 import { GetSpendingService } from '@app/services/spending/get-spending.service';
 import { SpendTransactionPage } from '@app/pages/spend-transaction/spend-transaction.page';
-import { Component, OnInit, IterableDiffer, IterableDiffers, DoCheck, IterableChangeRecord, ViewChild } from '@angular/core';
-import { NavController, ModalController, AlertController,  IonInfiniteScroll } from '@ionic/angular';
-import * as moment from 'moment';
+
 import { AppState } from '@app/reducers';
+import { SpendingActions }  from '@app/store/spending/spending.actions';
 
 
 @Component({
@@ -19,7 +24,7 @@ import { AppState } from '@app/reducers';
   templateUrl: './spending-list.page.html',
   styleUrls: ['./spending-list.page.scss']
 })
-export class SpendingListPage implements OnInit, DoCheck {
+export class SpendingListPage implements OnInit, OnDestroy, DoCheck {
 
   private initialDataLoaded: false;
   private subscription: Subscription = new Subscription();
@@ -97,6 +102,13 @@ export class SpendingListPage implements OnInit, DoCheck {
     });
   }
 
+  private loadData() {
+    const month = moment(this.spendingPeriod).format('MMM'),
+          year = moment(this.spendingPeriod).format('YYYY');
+    this.store.dispatch(SpendingActions.loadSpendingByMonth({month, year}));
+  }
+
+
   constructor(
     private store: Store<AppState>,
     private actions: ActionsSubject,
@@ -105,25 +117,51 @@ export class SpendingListPage implements OnInit, DoCheck {
     private modalController: ModalController,
     private iterable: IterableDiffers,
     private commonUIService: CommonUIService,
-    private authenticationService: AuthenticationService,
-    private getAccountService: GetAccountService,
-    private getSpendingService: GetSpendingService,
-    private deleteSpendingService: DeleteSpendingService) {
+    
+    private getSpendingService: GetSpendingService
+  ) {
 }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit() {
 
     this.iterableDiffer = this.iterable.find(this.transactions).create();
 
-    this.commonUIService.presentLoadingPage();
-    this.store.select('accountState'.)
-    this.getAccountService.invoke().subscribe(account => {
-      this.totalAvailableToSpendAmount = account.spendingLimit;
-      this.fillTransactions().then(result => {
-         this.commonUIService.dismissLoadingPage();
-      });
-    });
-
+    this.subscription
+      .add(
+        this.store.select('accountState').subscribe(accountState => {
+          if (!accountState.loading) {
+            this.totalAvailableToSpendAmount = accountState.data.spendingLimit;
+            this.loadData();
+          }
+        })
+      )
+      .add(
+        this.store.select('spendingState').subscribe(state => {
+          if (!state.loading) {
+            this.transactions = [];
+            state.data.forEach((spending) => this.transactions.push(spending) );
+            this.commonUIService.dismissLoadingPage();
+          } else {
+            this.commonUIService.presentLoadingPage();
+          }
+        })
+      )
+      .add(
+        this.actions.pipe(
+          ofType(SpendingActions.deleteSpendingSuccess)
+        ).subscribe(action => {
+          this.commonUIService.notify('Your spending has been deleted.');
+        })
+      )
+      .add(
+        this.actions.pipe(ofType(SpendingActions.loadSpendingByMonthFailed, SpendingActions.deleteSpendingFailed)).subscribe(action => {
+          this.commonUIService.notifyError('Oops!  Something went wrong.  Please try it again.');
+        })
+      )
+    
     // TODO: Temporarily disable paging logic
 
   }
@@ -151,28 +189,18 @@ export class SpendingListPage implements OnInit, DoCheck {
 
   dateChanged(date) {
     this.spendingPeriod = moment(date).endOf('month').toDate();
-    this.transactions = [];
-    this.commonUIService.presentLoadingPage();
-    this.fillTransactions().then(result => {
-      this.commonUIService.dismissLoadingPage();
-    });
+    this.loadData();
   }
 
   async addSpendTransaction() {
     const modal = await this.modalController.create({
-      component: SpendTransactionPage
-    });
-    modal.onDidDismiss().then((result) => {
-      if (result !== null) {
-        const startDate = moment(this.transactionsGroupedByDate[this.transactionsGroupedByDate.length - 1].date).toDate();
-        // const startDate = moment(this.spendingPeriod).startOf('month').toDate();
-        const endDate = moment(this.spendingPeriod).endOf('month').toDate();
-        if (moment(result.data.spending.date).toDate() >= startDate && moment(result.data.spending.date).toDate() <= endDate) {
-          this.transactions.push(result.data.spending);
-        }
-
+      component: SpendTransactionPage,
+      componentProps: {
+        month: moment(this.spendingPeriod).format('M'),
+        year: moment(this.spendingPeriod).format('YYYY')
       }
     });
+   
     return await modal.present();
   }
 
@@ -180,6 +208,8 @@ export class SpendingListPage implements OnInit, DoCheck {
     const modal = await this.modalController.create({
       component: SpendTransactionPage,
       componentProps: {
+        month: moment(this.spendingPeriod).format('M'),
+        year: moment(this.spendingPeriod).format('YYYY'),
         id: spending.id,
         spendDate: spending.date,
         spendAmount: spending.amount,
@@ -189,31 +219,7 @@ export class SpendingListPage implements OnInit, DoCheck {
         notes: spending.notes
       }
     });
-    modal.onDidDismiss().then((result) => {
-      if (result !== null) {
-        // const startDate = moment(this.spendingPeriod).startOf('month').toDate() ;
-        const startDate = moment(this.transactionsGroupedByDate[this.transactionsGroupedByDate.length - 1].date).toDate();
-        const endDate = moment(this.spendingPeriod).endOf('month').toDate();
-        const transaction = this.transactions.find(t => t.id === result.data.spending.id);
-
-        if (moment(result.data.spending.date).toDate() < startDate || moment(result.data.spending.date).toDate() > endDate){
-          // remove transactions
-          this.transactions = this.transactions.filter(t => t.id !== transaction.id);
-        } else {
-          transaction.amount = result.data.spending.amount;
-          transaction.date = result.data.spending.date;
-          transaction.description = result.data.spending.description;
-          transaction.location = result.data.spending.location;
-          transaction.category = result.data.spending.category;
-          transaction.notes = result.data.spending.notes;
-
-          // force refresh of the list since iterablediff does not detect changes in objects 
-          // we could however use a keyValueDiff for use cases like this
-          this.transactionsGroupedByDate = this.groupBy(this.transactions);
-          this.revaluateTotals(this.transactions);
-        }
-      }
-    });
+    
     return await modal.present();
   }
 
@@ -233,13 +239,7 @@ export class SpendingListPage implements OnInit, DoCheck {
         }, {
           text: 'Delete',
           handler: () => {
-            this.deleteSpendingService.id = id;
-            this.deleteSpendingService.invoke().subscribe(
-              result => {
-                const index = this.transactions.findIndex(t => t.id === id);
-                this.transactions.splice(index, 1);
-                this.commonUIService.notify('Your spending has been deleted.');
-              });
+            this.store.dispatch(SpendingActions.deleteSpending({ id }));
           }
         }
       ]
@@ -247,20 +247,7 @@ export class SpendingListPage implements OnInit, DoCheck {
     await alert.present();
   }
 
-  loadData(event) {
-    /*
-    console.log('scrolling...');
-    this.fillTransactions().then(result => {
-        event.target.complete();
-        console.log('data loaeded');
-        console.log('event.target.disabled', event.target.disabled);
-    });
-
-    setTimeout(() => {
-    }, 500);
-    */
-  }
-
+  
   viewNotifications() {
     this.navController.navigateForward('notifications');
   }

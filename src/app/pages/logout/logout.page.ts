@@ -2,7 +2,7 @@ import { Store } from '@ngrx/store';
 import { NavController, MenuController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '@app/reducers';
-import * as fromAuthActions from '@app/store/auth/auth.actions';
+import { AuthActions } from '@app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-logout',
@@ -17,7 +17,7 @@ export class LogoutPage implements OnInit {
     private menuController: MenuController) { }
 
   ngOnInit() {
-    this.store.dispatch(fromAuthActions.logout());
+    this.store.dispatch(AuthActions.logout());
     this.menuController.enable(false);
   }
 

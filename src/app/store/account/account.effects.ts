@@ -1,5 +1,5 @@
 import { LoginService } from '@app/services/login.service';
-import { updateAccount } from './account.actions';
+import { AccountActions } from './account.actions';
 import { Store } from '@ngrx/store';
 import { ChangeEmailService } from './../../services/auth/change-email.service';
 
@@ -27,14 +27,14 @@ export class AccountEffects {
 
   @Effect()
   loadAccount = this.actions.pipe(
-    ofType(fromAccountActions.loadAccount),
+    ofType(AccountActions.loadAccount),
     mergeMap(() =>
       this.getAccountService.invoke().pipe(
         map(result => {
-          return fromAccountActions.loadAccountSuccess({account: result});
+          return AccountActions.loadAccountSuccess({account: result});
         }),
         catchError((error, caught) => {
-          fromAccountActions.loadAccountFailed({err: error});
+          AccountActions.loadAccountFailed({err: error});
           return EMPTY;
         })
       )
@@ -43,17 +43,17 @@ export class AccountEffects {
 
   @Effect()
   updateAccount = this.actions.pipe(
-    ofType(fromAccountActions.updateAccount),
+    ofType(AccountActions.updateAccount),
     mergeMap(action => {
       this.updateAccountService.name = action.name;
       this.updateAccountService.email = action.email;
       this.updateAccountService.spendingLimit = action.spendingLimit;
       return this.updateAccountService.invoke().pipe(
         map(result => {
-          return fromAccountActions.updateAccountSuccess({account: result});
+          return AccountActions.updateAccountSuccess({account: result});
         }),
         catchError((error, caught) => {
-          fromAccountActions.updateAccountFailed({err: error});
+          AccountActions.updateAccountFailed({err: error});
           return EMPTY;
         })
       );
@@ -62,7 +62,7 @@ export class AccountEffects {
 
   @Effect()
   changeEmail = this.actions.pipe(
-    ofType(fromAccountActions.changeEmail),
+    ofType(AccountActions.changeEmail),
     flatMap(action => {
       this.changeEmailService.email = action.newEmail;
       this.updateAccountService.email = action.newEmail;
@@ -75,14 +75,14 @@ export class AccountEffects {
             flatMap((auth) => {
               return this.updateAccountService.invoke().pipe(
                 map((account) => {
-                  return fromAccountActions.changeEmailSuccess({ newEmail: account.email });
+                  return AccountActions.changeEmailSuccess({ newEmail: account.email });
                 })
               );
             })
           );
         }),
         catchError((error, caught) => {
-          fromAccountActions.changeEmailFailed({err: error});
+          AccountActions.changeEmailFailed({err: error});
           return null;
         })
       );

@@ -11,7 +11,7 @@ import { ComponentMessagingService } from '@app/services/component-messaging.ser
 import { NotificationService } from '@app/services/notification.service';
 import { AuthenticationService } from '@app/services/auth/authentication.service';
 
-import * as fromAuthActions from '@app/store/auth/auth.actions';
+import { AuthActions } from '@app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-edit-password',
@@ -28,7 +28,7 @@ export class EditPasswordPage implements OnInit, OnDestroy {
 
   private reauthenticateAndChangePassword() {
     // reathenticate before saving
-    this.store.dispatch(fromAuthActions.changePassword({
+    this.store.dispatch(AuthActions.changePassword({
       oldPassword: this.oldPassword.value,
       newPassword: this.newPassword.value,
       email: this.email
@@ -52,14 +52,14 @@ export class EditPasswordPage implements OnInit, OnDestroy {
       })
     )
     .add(
-      this.actions.pipe(ofType(fromAuthActions.changePasswordSuccess)).subscribe(data => {
+      this.actions.pipe(ofType(AuthActions.changePasswordSuccess)).subscribe(data => {
         this.notificationService.notify('Your password has been changed.');
         this.authenticationService.clear();
         this.navController.navigateRoot('login');
       })
     )
     .add(
-      this.actions.pipe(ofType(fromAuthActions.changePasswordFail)).subscribe(data => {
+      this.actions.pipe(ofType(AuthActions.changePasswordFail)).subscribe(data => {
         this.notificationService.notify('Oops! Something went wrong.  Please try again.');
       })
     );
