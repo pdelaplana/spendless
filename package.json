@@ -28,7 +28,7 @@
     "@ngrx/effects": "^8.6.0",
     "@ngrx/store": "^8.6.0",
     "core-js": "^2.5.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "ngx-gauge": "^1.0.0-beta.12",
     "ngx-logger": "^4.1.2",
     "rxjs": "~6.5.1",
