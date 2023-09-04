@@ -11,7 +11,10 @@
     <div class="the-title ion-text-center">
       <img src="assets/images/spendless-logo.png"  />
     </div>
-    <form [formGroup]="loginForm" >
+   
+  </div>
+  <div class="vertical-bottom">
+    <form [formGroup]="loginForm" class="ion-text-center ion-padding" >
       <div class="details">
 
         <div class="detail-item">
@@ -71,8 +74,6 @@
      
 
     </form>
-  </div>
-  <div class="vertical-bottom">
     <div class="ion-text-center ion-padding" >
       <ion-button size="block" type="submit" routerDirection="root" [disabled]="loginForm.invalid" (click)="signup()">
         Signup

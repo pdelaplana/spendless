@@ -25,7 +25,7 @@ export class SideMenuComponent implements OnInit {
     },
     {
       title: 'Help',
-      url: '/folder/Inbox',
+      url: '/help',
       icon: 'help'
     },
   ];

@@ -52,7 +52,11 @@ const routes: Routes = [
   {
     path: 'start',
     loadChildren: () => import('./pages/start/start.module').then( m => m.StartPageModule)
+  },  {
+    path: 'help',
+    loadChildren: () => import('./pages/help/help.module').then( m => m.HelpPageModule)
   },
+
 ];
 
 @NgModule({
